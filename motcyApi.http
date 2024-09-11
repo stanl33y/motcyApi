@@ -1,0 +1,6 @@
+@motcyApi_HostAddress = http://localhost:5156
+
+GET {{motcyApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
