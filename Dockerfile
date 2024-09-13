@@ -8,10 +8,14 @@ RUN dotnet restore
 COPY . ./
 RUN dotnet publish -c Release -o out
 
-# Create runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 
-COPY --from=build /app/out .
+RUN apt-get update && apt-get install -y netcat-openbsd
 
-ENTRYPOINT ["dotnet", "motcyApi.dll"]
+COPY --from=build /app/out .
+COPY --from=build /app/wait-for-it.sh .
+
+RUN chmod +x wait-for-it.sh
+
+ENTRYPOINT ["bash", "-c", "/app/wait-for-it.sh postgresdb 5432 -- dotnet motcyApi.dll"]

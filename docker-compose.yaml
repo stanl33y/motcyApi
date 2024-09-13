@@ -1,29 +1,6 @@
 version: '3.8'
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
-      - ConnectionStrings__DefaultConnection=${CONNECTION_STRING}
-      - RabbitMq__Hostname=${RABBITMQ_HOSTNAME}
-      - RabbitMq__QueueName=${RABBITMQ_QUEUE_NAME}
-      - RabbitMq__Username=${RABBITMQ_DEFAULT_USER}
-      - RabbitMq__Password=${RABBITMQ_DEFAULT_PASS}
-      - Jwt__Key=${JWT_KEY}
-      - Jwt__Issuer=${JWT_ISSUER}
-      - Jwt__Audience=${JWT_AUDIENCE}
-      - Jwt__ExpirationInMinutes=${JWT_EXPIRATION_MINUTES}
-    command: /bin/sh -c "dotnet ef database update && dotnet motcyApi.dll"
-    depends_on:
-      - postgresdb
-      - rabbitmq
-    networks:
-      - appnetwork
 
   postgresdb:
     image: postgres
@@ -44,6 +21,29 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    networks:
+      - appnetwork
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ConnectionStrings__DefaultConnection=${CONNECTION_STRING}
+      - RabbitMq__Hostname=${RABBITMQ_HOSTNAME}
+      - RabbitMq__QueueName=${RABBITMQ_QUEUE_NAME}
+      - RabbitMq__Username=${RABBITMQ_DEFAULT_USER}
+      - RabbitMq__Password=${RABBITMQ_DEFAULT_PASS}
+      - Jwt__Key=${JWT_KEY}
+      - Jwt__Issuer=${JWT_ISSUER}
+      - Jwt__Audience=${JWT_AUDIENCE}
+      - Jwt__ExpirationInMinutes=${JWT_EXPIRATION_MINUTES}
+    depends_on:
+      - postgresdb
+      - rabbitmq
     networks:
       - appnetwork
 
