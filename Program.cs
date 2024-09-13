@@ -24,14 +24,14 @@ builder.Services.AddScoped<IDeliveryPersonService, DeliveryPersonService>();
 // Handlers
 builder.Services.AddScoped<MotorcycleRegisteredEventHandler>();
 
-// Consumers
-builder.Services.AddHostedService<MotorcycleYearNotificationConsumer>();
-
 // Jwt 
 builder.Services.AddScoped<IJwtAuthenticationService, JwtAuthenticationService>();
 
 // RabbitMQ
 builder.Services.AddSingleton<RabbitMqService>();
+
+// Consumers
+builder.Services.AddHostedService<MotorcycleYearNotificationConsumer>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
