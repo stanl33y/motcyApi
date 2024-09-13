@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ConnectionStrings__DefaultConnection=${CONNECTION_STRING}
+      - RabbitMq__Hostname=${RABBITMQ_HOSTNAME}
+      - RabbitMq__QueueName=${RABBITMQ_QUEUE_NAME}
+      - RabbitMq__Username=${RABBITMQ_DEFAULT_USER}
+      - RabbitMq__Password=${RABBITMQ_DEFAULT_PASS}
+      - Jwt__Key=${JWT_KEY}
+      - Jwt__Issuer=${JWT_ISSUER}
+      - Jwt__Audience=${JWT_AUDIENCE}
+      - Jwt__ExpirationInMinutes=${JWT_EXPIRATION_MINUTES}
+    command: /bin/sh -c "dotnet ef database update && dotnet motcyApi.dll"
+    depends_on:
+      - postgresdb
+      - rabbitmq
+    networks:
+      - appnetwork
+
+  postgresdb:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    networks:
+      - appnetwork
+
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    networks:
+      - appnetwork
+
+networks:
+  appnetwork:
+    driver: bridge
+
+
+# Manual commands
+
+#RabbitMQ
+# docker run -d --name rabbitmq -e RABBITMQ_DEFAULT_USER=rabbitmq -e RABBITMQ_DEFAULT_PASS=pass -p 5672:5672 -p 15672:15672 
+
+#Postgres
+# docker run --name postgresdb -e POSTGRES_PASSWORD=pass -e POSTGRES_USER=postgres -e POSTGRES_DB=motcy -p 5555:5432 -d postgres  rabbitmq:management

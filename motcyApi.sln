@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "motcyApi", "motcyApi.csproj", "{A3619643-FCEE-416C-81B8-BB6F15A881DD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A3619643-FCEE-416C-81B8-BB6F15A881DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3619643-FCEE-416C-81B8-BB6F15A881DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3619643-FCEE-416C-81B8-BB6F15A881DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3619643-FCEE-416C-81B8-BB6F15A881DD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0ADEA945-8DCE-47D7-91BF-5DE124498326}
+	EndGlobalSection
+EndGlobal

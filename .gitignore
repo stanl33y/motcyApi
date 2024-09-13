@@ -89,3 +89,6 @@ Migrations/
 
 # Windows shortcuts
 *.lnk
+
+# Environment file
+.env
