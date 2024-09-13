@@ -25,7 +25,7 @@ public class DeliveryPersonController : ControllerBase
     ///     {
     ///        "identificador": "123",
     ///        "nome": "John Doe",
-    ///        "cnpj": "12.345.678/0001-99",
+    ///        "cnpj": "12345678000199",
     ///        "data_nascimento": "1990-01-01",
     ///        "numero_cnh": "XYZ123456",
     ///        "tipo_cnh": "A",
