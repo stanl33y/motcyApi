@@ -1,10 +1,10 @@
 public class MotorcycleRegisteredEventHandler
 {
-    private readonly RabbitMqService _rabbitMqService;
+    private readonly IRabbitMqService _rabbitMqService;
     private readonly AppDbContext _dbContext;
     private readonly INotificationService _notificationService;
 
-    public MotorcycleRegisteredEventHandler(RabbitMqService rabbitMqService, AppDbContext dbContext, INotificationService notificationService)
+    public MotorcycleRegisteredEventHandler(IRabbitMqService rabbitMqService, AppDbContext dbContext, INotificationService notificationService)
     {
         _rabbitMqService = rabbitMqService;
         _dbContext = dbContext;

@@ -2,7 +2,7 @@ using RabbitMQ.Client;
 using System.Text;
 using Newtonsoft.Json;
 
-public class RabbitMqService
+public class RabbitMqService: IRabbitMqService
 {
     private readonly string _hostname;
     private readonly string _queueName;

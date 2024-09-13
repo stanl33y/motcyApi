@@ -1,0 +1,45 @@
+using Moq;
+using Xunit;
+using System;
+using System.Threading.Tasks;
+
+public class RentalServiceTests: TestBase
+{
+    private readonly RentalService _rentalService;
+    private readonly Mock<IRentalRepository> _rentalRepositoryMock;
+    private readonly Mock<IMotorcycleRepository> _motorcycleRepositoryMock;
+    private readonly Mock<IDeliveryPersonRepository> _deliveryPersonRepositoryMock;
+
+    public RentalServiceTests()
+    {
+        _rentalRepositoryMock = new Mock<IRentalRepository>();
+        _motorcycleRepositoryMock = new Mock<IMotorcycleRepository>();
+        _deliveryPersonRepositoryMock = new Mock<IDeliveryPersonRepository>();
+        _rentalService = new RentalService(
+            _rentalRepositoryMock.Object,
+            _motorcycleRepositoryMock.Object,
+            _deliveryPersonRepositoryMock.Object
+        );
+    }
+
+    [Fact]
+    public async Task CreateRentalAsync_ShouldCreateRental()
+    {
+        // Arrange
+        var motorcycle = new Motorcycle { Id = "moto01", Model = "Yamaha", Year = 2021, Plate = "YMH-2021" };
+        var deliveryPerson = new DeliveryPerson { Id = "del01", Name = "John Doe" };
+        _motorcycleRepositoryMock.Setup(repo => repo.GetMotorcycleByIdAsync("moto01")).ReturnsAsync(motorcycle);
+        _deliveryPersonRepositoryMock.Setup(repo => repo.GetDeliveryPersonByIdAsync("del01")).ReturnsAsync(deliveryPerson);
+
+        var rental = new Rental { MotorcycleId = motorcycle.Id, DeliveryPersonId = deliveryPerson.Id, RentalPlan = 7 };
+        _rentalRepositoryMock.Setup(repo => repo.AddRentalAsync(It.IsAny<Rental>())).ReturnsAsync(rental);
+
+        // Act
+        var result = await _rentalService.CreateRentalAsync("moto01", "del01", 7, DateTime.Now, DateTime.Now.AddDays(7), DateTime.Now.AddDays(7));
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal("moto01", result.MotorcycleId);
+        _rentalRepositoryMock.Verify(repo => repo.AddRentalAsync(It.IsAny<Rental>()), Times.Once);
+    }
+}
