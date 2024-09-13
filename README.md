@@ -1,4 +1,5 @@
 # Motorcycle and Delivery Management API
+[![.NET Build and Test](https://github.com/stanl33y/motcyApi/actions/workflows/dotnet.yml/badge.svg)](https://github.com/stanl33y/motcyApi/actions/workflows/dotnet.yml)
 
 This project is a **Motorcycle and Delivery Management API** built using **.NET 8**, **PostgreSQL**, **RabbitMQ**, and **Docker**. The API provides endpoints for managing motorcycles, delivery personnel, and rental services, along with Swagger documentation for testing and exploring the API.
 
