@@ -27,8 +27,8 @@ Before running the project, ensure you have the following installed:
 Clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/stanl33y/motorcycle-management-api.git
-cd motorcycle-management-api
+git clone https://github.com/stanl33y/motcyApi.git
+cd motcyApi
 ```
 
 ### 2. Rename the `.env.example` File
@@ -109,12 +109,6 @@ docker-compose down
 ```
 
 This will stop all running services and remove the containers.
-
-## Configuration Notes
-
-### Fixed API Port
-
-The API is configured to always run on port **5000** on your host machine, which is mapped to port **80** inside the container. This ensures that the API is always accessible on a predictable port.
 
 ## Additional Commands
 
