@@ -17,7 +17,7 @@ public class RabbitMqService: IRabbitMqService
         _password = configuration["RabbitMq:Password"] ?? "guest";
     }
 
-    public string QueueName => _queueName;
+    public string GetQueueName() => _queueName;
 
     public ConnectionFactory GetConnectionFactory()
     {

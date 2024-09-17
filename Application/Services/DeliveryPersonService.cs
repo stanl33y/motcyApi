@@ -1,10 +1,13 @@
 public class DeliveryPersonService : IDeliveryPersonService
 {
     private readonly IDeliveryPersonRepository _deliveryPersonRepository;
+    private readonly IStorageService _fileService;
 
-    public DeliveryPersonService(IDeliveryPersonRepository deliveryPersonRepository)
+    public DeliveryPersonService(IDeliveryPersonRepository deliveryPersonRepository, IStorageService fileService)
     {
         _deliveryPersonRepository = deliveryPersonRepository;
+        _fileService = fileService;
+
     }
 
     public async Task<DeliveryPerson> RegisterDeliveryPersonAsync(DeliveryPerson deliveryPerson)
@@ -35,9 +38,8 @@ public class DeliveryPersonService : IDeliveryPersonService
             return false;
         }
 
-        deliveryPerson.LicenseImage = image;
-        await _deliveryPersonRepository.UpdateDeliveryPersonAsync(deliveryPerson);
-        
+        await _fileService.SaveFileFromBase64Async(image, $"{id}.png");
+
         return true;
     }
 
@@ -49,7 +51,9 @@ public class DeliveryPersonService : IDeliveryPersonService
             return false;
         }
 
-        await _deliveryPersonRepository.DeleteDeliveryPersonAsync(id); 
+        await _deliveryPersonRepository.DeleteDeliveryPersonAsync(id);
+        await _fileService.DeleteFileAsync($"{id}.png");
+
         return true;
     }
 }

@@ -81,7 +81,7 @@ public class RentalService : IRentalService
         , string deliveryPersonId
         , int rentalPlan
         , DateTime startDate
-        , DateTime endDate
+        , DateTime? endDate
         , DateTime expectedEndDate
     )
     {

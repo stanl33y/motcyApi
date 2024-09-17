@@ -20,7 +20,7 @@ public class RentalController : ControllerBase
     /// </summary>
     /// <remarks>
     /// Sample request:
-    /// 
+    ///
     ///     POST /api/v1/locacao
     ///     {
     ///        "entregador_id": "123",
@@ -30,7 +30,7 @@ public class RentalController : ControllerBase
     ///        "data_termino": "2024-09-10T12:00:00Z",
     ///        "data_previsao_termino": "2024-09-08T12:00:00Z"
     ///     }
-    /// 
+    ///
     /// Creates a new rental with the provided details.
     /// </remarks>
     /// <param name="rentalDto">Object containing rental details.</param>
@@ -39,7 +39,7 @@ public class RentalController : ControllerBase
     /// <response code="400">Error creating rental</response>
     [Authorize(Roles = "admin, deliveryperson")]
     [HttpPost]
-    public async Task<IActionResult> CreateRental([FromBody] RentalDTO rentalDto)
+    public async Task<ActionResult<RentalDTO>> CreateRental([FromBody] RentalDTO rentalDto)
     {
         var rental = await _rentalService.CreateRentalAsync(
             rentalDto.MotoId,
@@ -67,7 +67,7 @@ public class RentalController : ControllerBase
     /// <response code="404">Rental not found</response>
     [Authorize(Roles = "admin, deliveryperson")]
     [HttpPut("{id}/devolucao")]
-    public async Task<IActionResult> ReturnMotorcycle(int id, [FromBody] ReturnDateDTO returnDate)
+    public async Task<ActionResult<RentalDTO>> ReturnMotorcycle(int id, [FromBody] ReturnDateDTO returnDate)
     {
         var rental = await _rentalService.ReturnMotorcycleAsync(id, returnDate.DataDevolucao);
         if (rental == null)
@@ -75,7 +75,19 @@ public class RentalController : ControllerBase
             return NotFound();
         }
 
-        return Ok(rental);
+        var rentalDto = new RentalDTO
+        {
+            Id = rental.Id,
+            MotoId = rental.MotorcycleId,
+            EntregadorId = rental.DeliveryPersonId,
+            Plano = rental.RentalPlan,
+            DataInicio = rental.StartDate,
+            DataTermino = rental.EndDate,
+            DataPrevisaoTermino = rental.ExpectedEndDate,
+            ValorTotal = rental.TotalCost,
+        };
+
+        return Ok(rentalDto);
     }
 
     /// <summary>
@@ -87,7 +99,7 @@ public class RentalController : ControllerBase
     /// <response code="404">Rental not found</response>
     [Authorize(Roles = "admin, deliveryperson")]
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetRentalById(int id)
+    public async Task<ActionResult<RentalDTO>> GetRentalById(int id)
     {
         var rental = await _rentalService.GetRentalByIdAsync(id);
         if (rental == null)
@@ -95,7 +107,19 @@ public class RentalController : ControllerBase
             return NotFound();
         }
 
-        return Ok(rental);
+        var rentalDto = new RentalDTO
+        {
+            Id = rental.Id,
+            MotoId = rental.MotorcycleId,
+            EntregadorId = rental.DeliveryPersonId,
+            Plano = rental.RentalPlan,
+            DataInicio = rental.StartDate,
+            DataTermino = rental.EndDate,
+            DataPrevisaoTermino = rental.ExpectedEndDate,
+            ValorTotal = rental.TotalCost,
+        };
+
+        return Ok(rentalDto);
     }
 
     /// <summary>
@@ -105,9 +129,27 @@ public class RentalController : ControllerBase
     /// <response code="200">List of rentals retrieved successfully</response>
     [Authorize(Roles = "admin")]
     [HttpGet]
-    public async Task<IActionResult> GetAllRentals()
+    public async Task<ActionResult<List<RentalDTO>>> GetAllRentals()
     {
         var rentals = await _rentalService.GetAllRentalsAsync();
-        return Ok(rentals);
+
+        if (rentals == null)
+        {
+            return new List<RentalDTO>();
+        }
+
+        var rentalsDto = rentals.Select(rental => new RentalDTO
+        {
+            Id = rental.Id,
+            MotoId = rental.MotorcycleId,
+            EntregadorId = rental.DeliveryPersonId,
+            Plano = rental.RentalPlan,
+            DataInicio = rental.StartDate,
+            DataTermino = rental.EndDate,
+            DataPrevisaoTermino = rental.ExpectedEndDate,
+            ValorTotal = rental.TotalCost,
+        }).ToList();
+
+        return Ok(rentalsDto);
     }
 }

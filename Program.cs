@@ -9,6 +9,9 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// RabbitMQ
+builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
+
 // Repositories
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IMotorcycleRepository, MotorcycleRepository>();
@@ -20,15 +23,14 @@ builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IMotorcycleService, MotorcycleService>();
 builder.Services.AddScoped<IRentalService, RentalService>();
 builder.Services.AddScoped<IDeliveryPersonService, DeliveryPersonService>();
+builder.Services.AddScoped<IStorageService, LocalFileStorageService>();
 
 // Handlers
 builder.Services.AddScoped<MotorcycleRegisteredEventHandler>();
 
-// Jwt 
+// Jwt
 builder.Services.AddScoped<IJwtAuthenticationService, JwtAuthenticationService>();
 
-// RabbitMQ
-builder.Services.AddSingleton<RabbitMqService>();
 
 // Consumers
 builder.Services.AddHostedService<MotorcycleYearNotificationConsumer>();
@@ -39,7 +41,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ExceptionHandlingFilter>();
-}).AddJsonOptions(options => 
+}).AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
     options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.SnakeCaseLower;

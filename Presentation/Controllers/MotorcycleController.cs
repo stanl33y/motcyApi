@@ -20,7 +20,7 @@ public class MotorcycleController : ControllerBase
     /// </summary>
     /// <remarks>
     /// Sample request:
-    /// 
+    ///
     ///     POST /api/v1/motos
     ///     {
     ///        "identificador": "123",
@@ -28,7 +28,7 @@ public class MotorcycleController : ControllerBase
     ///        "modelo": "Yamaha XTZ",
     ///        "placa": "XYZ-1234"
     ///     }
-    /// 
+    ///
     /// Creates a new motorcycle with the provided details.
     /// </remarks>
     /// <param name="motorcycleDto">Object containing motorcycle details.</param>
@@ -64,7 +64,7 @@ public class MotorcycleController : ControllerBase
     /// <response code="404">Motorcycle not found</response>
     [Authorize(Roles = "admin")]
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetMotorcycleById(string id)
+    public async Task<ActionResult<MotorcycleDTO>> GetMotorcycleById(string id)
     {
         var motorcycle = await _motorcycleService.GetMotorcycleByIdAsync(id);
         if (motorcycle == null)
@@ -72,7 +72,15 @@ public class MotorcycleController : ControllerBase
             return NotFound();
         }
 
-        return Ok(motorcycle);
+        var motorcycleDto = new MotorcycleDTO
+        {
+            Identificador = motorcycle.Id,
+            Ano = motorcycle.Year,
+            Modelo = motorcycle.Model,
+            Placa = motorcycle.Plate
+        };
+
+        return Ok(motorcycleDto);
     }
 
     /// <summary>
@@ -93,7 +101,15 @@ public class MotorcycleController : ControllerBase
             return NotFound();
         }
 
-        return Ok(updatedMotorcycle);
+        var motorcycleDtoUpdated = new MotorcycleDTO
+        {
+            Identificador = updatedMotorcycle.Id,
+            Ano = updatedMotorcycle.Year,
+            Modelo = updatedMotorcycle.Model,
+            Placa = updatedMotorcycle.Plate
+        };
+
+        return Ok(motorcycleDtoUpdated);
     }
 
     /// <summary>
@@ -126,6 +142,15 @@ public class MotorcycleController : ControllerBase
     public async Task<IActionResult> GetAllMotorcycles()
     {
         var motorcycles = await _motorcycleService.GetAllMotorcyclesAsync();
-        return Ok(motorcycles);
+
+        var motorcyclesDto = motorcycles.Select(m => new MotorcycleDTO
+        {
+            Identificador = m.Id,
+            Ano = m.Year,
+            Modelo = m.Model,
+            Placa = m.Plate
+        });
+
+        return Ok(motorcyclesDto);
     }
 }

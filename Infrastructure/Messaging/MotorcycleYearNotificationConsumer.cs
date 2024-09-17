@@ -5,14 +5,14 @@ using System.Text;
 
 public class MotorcycleYearNotificationConsumer : BackgroundService
 {
-    private readonly RabbitMqService _rabbitMqService;
+    private readonly IRabbitMqService _rabbitMqService;
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly ILogger<MotorcycleYearNotificationConsumer> _logger;
     private IConnection _connection;
     private IModel _channel;
 
     public MotorcycleYearNotificationConsumer(
-        RabbitMqService rabbitMqService,
+        IRabbitMqService rabbitMqService,
         IServiceScopeFactory scopeFactory,
         ILogger<MotorcycleYearNotificationConsumer> logger)
     {
@@ -29,7 +29,7 @@ public class MotorcycleYearNotificationConsumer : BackgroundService
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
 
-            _channel.QueueDeclare(queue: _rabbitMqService.QueueName,
+            _channel.QueueDeclare(queue: _rabbitMqService.GetQueueName(),
                                  durable: false,
                                  exclusive: false,
                                  autoDelete: false,
@@ -85,7 +85,7 @@ public class MotorcycleYearNotificationConsumer : BackgroundService
                     }
                 };
 
-                _channel.BasicConsume(queue: _rabbitMqService.QueueName,
+                _channel.BasicConsume(queue: _rabbitMqService.GetQueueName(),
                                       autoAck: true,
                                       consumer: consumer);
 

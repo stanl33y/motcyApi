@@ -19,9 +19,8 @@ public class Rental
     [DataType(DataType.Date)]
     public DateTime StartDate { get; set; }
 
-    [Required(ErrorMessage = "EndDate is required")]
     [DataType(DataType.Date)]
-    public DateTime EndDate { get; set; }
+    public DateTime? EndDate { get; set; }
 
     [Required(ErrorMessage = "ExpectedEndDate is required")]
     [DataType(DataType.Date)]
@@ -34,7 +33,7 @@ public class Rental
 
     public DateTime? ReturnDate { get; set; }
 
-    
+
     public Motorcycle Motorcycle { get; set; }
 
     public DeliveryPerson DeliveryPerson { get; set; }

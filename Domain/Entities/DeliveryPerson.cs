@@ -25,8 +25,5 @@ public class DeliveryPerson
     [StringLength(3, ErrorMessage = "LicenseType can only be 'A', 'B', or 'A+B'")]
     public string LicenseType { get; set; }
 
-    [Required(ErrorMessage = "LicenseImage is required")]
-    public string LicenseImage { get; set; }
-
     public ICollection<Rental> Rentals { get; set; } = new List<Rental>();
 }

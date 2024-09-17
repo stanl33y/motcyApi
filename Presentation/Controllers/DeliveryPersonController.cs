@@ -9,10 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 public class DeliveryPersonController : ControllerBase
 {
     private readonly IDeliveryPersonService _deliveryPersonService;
+    private readonly IStorageService _fileService;
 
-    public DeliveryPersonController(IDeliveryPersonService deliveryPersonService)
+    public DeliveryPersonController(IDeliveryPersonService deliveryPersonService, IStorageService fileService)
     {
         _deliveryPersonService = deliveryPersonService;
+        _fileService = fileService;
     }
 
     /// <summary>
@@ -20,7 +22,7 @@ public class DeliveryPersonController : ControllerBase
     /// </summary>
     /// <remarks>
     /// Sample request:
-    /// 
+    ///
     ///     POST /api/v1/entregadores
     ///     {
     ///        "identificador": "123",
@@ -31,7 +33,7 @@ public class DeliveryPersonController : ControllerBase
     ///        "tipo_cnh": "A",
     ///        "imagem_cnh": "base64EncodedImageString"
     ///     }
-    /// 
+    ///
     /// Registers a new delivery person with the provided details.
     /// </remarks>
     /// <param name="deliveryPersonDto">Object containing delivery person details.</param>
@@ -49,9 +51,10 @@ public class DeliveryPersonController : ControllerBase
             Cnpj = deliveryPersonDto.Cnpj,
             DateOfBirth = deliveryPersonDto.DataNascimento,
             LicenseNumber = deliveryPersonDto.NumeroCnh,
-            LicenseType = deliveryPersonDto.TipoCnh,
-            LicenseImage = deliveryPersonDto.ImagemCnh
+            LicenseType = deliveryPersonDto.TipoCnh
         });
+
+        string filePath = await _fileService.SaveFileFromBase64Async(deliveryPersonDto.ImagemCnh, $"{deliveryPersonDto.Identificador}.png");
 
         if (result == null)
         {
@@ -70,7 +73,7 @@ public class DeliveryPersonController : ControllerBase
     /// <response code="404">Delivery person not found</response>
     [Authorize(Roles = "admin, deliveryperson")]
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetDeliveryPersonById(string id)
+    public async Task<ActionResult<DeliveryPersonDTO>> GetDeliveryPersonById(string id)
     {
         var deliveryPerson = await _deliveryPersonService.GetDeliveryPersonByIdAsync(id);
         if (deliveryPerson == null)
@@ -78,7 +81,20 @@ public class DeliveryPersonController : ControllerBase
             return NotFound();
         }
 
-        return Ok(deliveryPerson);
+        var imageBase64 = await _fileService.GetFileAsBase64Async($"{deliveryPerson.Id}.png");
+
+        var deliveryPersonDto = new DeliveryPersonDTO
+        {
+            Identificador = deliveryPerson.Id,
+            Nome = deliveryPerson.Name,
+            Cnpj = deliveryPerson.Cnpj,
+            DataNascimento = deliveryPerson.DateOfBirth,
+            NumeroCnh = deliveryPerson.LicenseNumber,
+            TipoCnh = deliveryPerson.LicenseType,
+            ImagemCnh = imageBase64
+        };
+
+        return Ok(deliveryPersonDto);
     }
 
     /// <summary>
@@ -109,9 +125,33 @@ public class DeliveryPersonController : ControllerBase
     /// <response code="200">List of delivery people retrieved successfully</response>
     [Authorize(Roles = "admin")]
     [HttpGet]
-    public async Task<IActionResult> GetAllDeliveryPeople()
+    public async Task<ActionResult<List<DeliveryPersonDTO>>> GetAllDeliveryPeople()
     {
         var deliveryPeople = await _deliveryPersonService.GetAllDeliveryPeopleAsync();
-        return Ok(deliveryPeople);
+
+        var deliveryPeopleDto = new List<DeliveryPersonDTO>();
+
+        if (deliveryPeople == null)
+        {
+            return Ok(deliveryPeopleDto);
+        }
+
+        foreach (var deliveryPerson in deliveryPeople)
+        {
+            var imageBase64 = await _fileService.GetFileAsBase64Async($"{deliveryPerson.Id}.png");
+
+            deliveryPeopleDto.Add(new DeliveryPersonDTO
+            {
+                Identificador = deliveryPerson.Id,
+                Nome = deliveryPerson.Name,
+                Cnpj = deliveryPerson.Cnpj,
+                DataNascimento = deliveryPerson.DateOfBirth,
+                NumeroCnh = deliveryPerson.LicenseNumber,
+                TipoCnh = deliveryPerson.LicenseType,
+                ImagemCnh = imageBase64
+            });
+        }
+
+        return Ok(deliveryPeopleDto);
     }
 }

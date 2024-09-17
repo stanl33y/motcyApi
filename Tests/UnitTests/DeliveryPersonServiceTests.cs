@@ -1,16 +1,20 @@
-using Moq;
 using Xunit;
-using System.Threading.Tasks;
+using Moq;
 
-public class DeliveryPersonServiceTests: TestBase
+public class DeliveryPersonServiceTests : TestBase
 {
     private readonly DeliveryPersonService _deliveryPersonService;
     private readonly Mock<IDeliveryPersonRepository> _deliveryPersonRepositoryMock;
+    private readonly Mock<IStorageService> _storageServiceMock;
 
     public DeliveryPersonServiceTests()
     {
         _deliveryPersonRepositoryMock = new Mock<IDeliveryPersonRepository>();
-        _deliveryPersonService = new DeliveryPersonService(_deliveryPersonRepositoryMock.Object);
+        _storageServiceMock = new Mock<IStorageService>();
+        _deliveryPersonService = new DeliveryPersonService(
+            _deliveryPersonRepositoryMock.Object,
+            _storageServiceMock.Object
+        );
     }
 
     [Fact]
@@ -23,10 +27,9 @@ public class DeliveryPersonServiceTests: TestBase
             Name = "John Doe",
             Cnpj = "12345678901234",
             LicenseNumber = "12345678900",
-            LicenseType = "A",
-            LicenseImage = "base64string"
+            LicenseType = "A"
         };
-        
+
         _deliveryPersonRepositoryMock.Setup(repo => repo.AddDeliveryPersonAsync(It.IsAny<DeliveryPerson>()))
             .ReturnsAsync(deliveryPerson);
 
@@ -48,7 +51,6 @@ public class DeliveryPersonServiceTests: TestBase
             Id = "del01",
             Name = "Jane Doe"
         };
-
         _deliveryPersonRepositoryMock.Setup(repo => repo.GetDeliveryPersonByIdAsync("del01"))
             .ReturnsAsync(deliveryPerson);
 
@@ -69,7 +71,6 @@ public class DeliveryPersonServiceTests: TestBase
             new DeliveryPerson { Id = "del01", Name = "John Doe" },
             new DeliveryPerson { Id = "del02", Name = "Jane Doe" }
         };
-
         _deliveryPersonRepositoryMock.Setup(repo => repo.GetAllDeliveryPeopleAsync())
             .ReturnsAsync(deliveryPeople);
 
