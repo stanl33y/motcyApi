@@ -1,0 +1,43 @@
+# .NET build output directories
+**/bin/
+**/obj/
+**/out/
+
+# Development files and directories
+**/.vs/           # Visual Studio directory
+**/.vscode/       # Visual Studio Code directory
+**/*.user         # User-specific files
+**/*.userosscache # User specific cache
+**/*.dbmdl        # Database model files
+**/*.jfm          # SQL Server Database Project files
+
+# Compiled files
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Logs and databases
+*.log
+*.sqlite
+
+# OS generated files
+.DS_Store         # macOS directory metadata
+.DS_Store?        # macOS directory metadata (legacy)
+._*               # macOS resource forks
+.Spotlight-V100   # macOS Spotlight index
+.Trashes          # macOS trash directory on external volumes
+ehthumbs.db       # Windows thumbnail cache
+Thumbs.db         # Windows thumbnail cache
+
+# Package directories
+**/packages/      # NuGet packages directory
+**/node_modules/  # Node.js modules directory
+
+# Publish directory
+**/publish/       # Directory used for publishing the app
+
+# Test results
+**/TestResults/   # Directory containing test results
