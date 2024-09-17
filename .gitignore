@@ -92,3 +92,6 @@ Migrations/
 
 # Environment file
 .env
+
+# Local storage files
+Storage/
