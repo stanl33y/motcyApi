@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 /// Controller responsible for managing delivery personnel.
 /// </summary>
 [ApiController]
-[Route("api/v1/entregadores")]
+[Route("api/v1/deliverypersons")]
 public class DeliveryPersonController : ControllerBase
 {
     private readonly IDeliveryPersonService _deliveryPersonService;
@@ -23,15 +23,15 @@ public class DeliveryPersonController : ControllerBase
     /// <remarks>
     /// Sample request:
     ///
-    ///     POST /api/v1/entregadores
+    ///     POST /api/v1/deliverypersons
     ///     {
-    ///        "identificador": "123",
-    ///        "nome": "John Doe",
+    ///        "id": "123",
+    ///        "name": "John Doe",
     ///        "cnpj": "12345678000199",
-    ///        "data_nascimento": "1990-01-01",
-    ///        "numero_cnh": "XYZ123456",
-    ///        "tipo_cnh": "A",
-    ///        "imagem_cnh": "base64EncodedImageString"
+    ///        "date_of_birth": "1990-01-01",
+    ///        "license_number": "XYZ123456",
+    ///        "license_type": "A",
+    ///        "image_license": "base64EncodedImageString"
     ///     }
     ///
     /// Registers a new delivery person with the provided details.
@@ -46,15 +46,15 @@ public class DeliveryPersonController : ControllerBase
     {
         var result = await _deliveryPersonService.RegisterDeliveryPersonAsync(new DeliveryPerson
         {
-            Id = deliveryPersonDto.Identificador,
-            Name = deliveryPersonDto.Nome,
+            Id = deliveryPersonDto.Id,
+            Name = deliveryPersonDto.Name,
             Cnpj = deliveryPersonDto.Cnpj,
-            DateOfBirth = deliveryPersonDto.DataNascimento,
-            LicenseNumber = deliveryPersonDto.NumeroCnh,
-            LicenseType = deliveryPersonDto.TipoCnh
+            DateOfBirth = deliveryPersonDto.DateOfBirth,
+            LicenseNumber = deliveryPersonDto.LicenseNumber,
+            LicenseType = deliveryPersonDto.LicenseType
         });
 
-        string filePath = await _fileService.SaveFileFromBase64Async(deliveryPersonDto.ImagemCnh, $"{deliveryPersonDto.Identificador}.png");
+        string filePath = await _fileService.SaveFileFromBase64Async(deliveryPersonDto.ImageLicence, $"{deliveryPersonDto.Id}.png");
 
         if (result == null)
         {
@@ -85,13 +85,13 @@ public class DeliveryPersonController : ControllerBase
 
         var deliveryPersonDto = new DeliveryPersonDTO
         {
-            Identificador = deliveryPerson.Id,
-            Nome = deliveryPerson.Name,
+            Id = deliveryPerson.Id,
+            Name = deliveryPerson.Name,
             Cnpj = deliveryPerson.Cnpj,
-            DataNascimento = deliveryPerson.DateOfBirth,
-            NumeroCnh = deliveryPerson.LicenseNumber,
-            TipoCnh = deliveryPerson.LicenseType,
-            ImagemCnh = imageBase64
+            DateOfBirth = deliveryPerson.DateOfBirth,
+            LicenseNumber = deliveryPerson.LicenseNumber,
+            LicenseType = deliveryPerson.LicenseType,
+            ImageLicence = imageBase64
         };
 
         return Ok(deliveryPersonDto);
@@ -142,13 +142,13 @@ public class DeliveryPersonController : ControllerBase
 
             deliveryPeopleDto.Add(new DeliveryPersonDTO
             {
-                Identificador = deliveryPerson.Id,
-                Nome = deliveryPerson.Name,
+                Id = deliveryPerson.Id,
+                Name = deliveryPerson.Name,
                 Cnpj = deliveryPerson.Cnpj,
-                DataNascimento = deliveryPerson.DateOfBirth,
-                NumeroCnh = deliveryPerson.LicenseNumber,
-                TipoCnh = deliveryPerson.LicenseType,
-                ImagemCnh = imageBase64
+                DateOfBirth = deliveryPerson.DateOfBirth,
+                LicenseNumber = deliveryPerson.LicenseNumber,
+                LicenseType = deliveryPerson.LicenseType,
+                ImageLicence = imageBase64
             });
         }
 

@@ -58,6 +58,7 @@ public class RentalService : IRentalService
             15 => 28.00M,
             30 => 22.00M,
             45 => 20.00M,
+            50 => 18.00M,
             _ => 0.00M
         };
 
@@ -131,6 +132,7 @@ public class RentalService : IRentalService
             15 => 28.00M,
             30 => 22.00M,
             45 => 20.00M,
+            50 => 18.00M,
             _ => throw new ArgumentException("Invalid rental plan.")
         };
 

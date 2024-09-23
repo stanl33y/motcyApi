@@ -20,12 +20,12 @@ public class LoggingMiddleware
 
         try
         {
-            await _next(context); // Chama o próximo middleware
+            await _next(context);
         }
         catch (Exception ex)
         {
             _logger.LogError($"An error occurred: {ex.Message}");
-            throw; // Re-throw the exception after logging it
+            throw;
         }
         finally
         {

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 /// Controller responsible for managing motorcycles.
 /// </summary>
 [ApiController]
-[Route("api/v1/motos")]
+[Route("api/v1/motorcycles")]
 public class MotorcycleController : ControllerBase
 {
     private readonly IMotorcycleService _motorcycleService;
@@ -21,12 +21,12 @@ public class MotorcycleController : ControllerBase
     /// <remarks>
     /// Sample request:
     ///
-    ///     POST /api/v1/motos
+    ///     POST /api/v1/motorcycles
     ///     {
-    ///        "identificador": "123",
-    ///        "ano": 2020,
-    ///        "modelo": "Yamaha XTZ",
-    ///        "placa": "XYZ-1234"
+    ///        "id": "123",
+    ///        "year": 2020,
+    ///        "model": "Yamaha XTZ",
+    ///        "plate": "XYZ-1234"
     ///     }
     ///
     /// Creates a new motorcycle with the provided details.
@@ -41,10 +41,10 @@ public class MotorcycleController : ControllerBase
     {
         var result = await _motorcycleService.AddMotorcycleAsync(new Motorcycle
         {
-            Id = motorcycleDto.Identificador,
-            Year = motorcycleDto.Ano,
-            Model = motorcycleDto.Modelo,
-            Plate = motorcycleDto.Placa
+            Id = motorcycleDto.Id,
+            Year = motorcycleDto.Year,
+            Model = motorcycleDto.Model,
+            Plate = motorcycleDto.Plate
         });
 
         if (result == null)
@@ -74,10 +74,10 @@ public class MotorcycleController : ControllerBase
 
         var motorcycleDto = new MotorcycleDTO
         {
-            Identificador = motorcycle.Id,
-            Ano = motorcycle.Year,
-            Modelo = motorcycle.Model,
-            Placa = motorcycle.Plate
+            Id = motorcycle.Id,
+            Year = motorcycle.Year,
+            Model = motorcycle.Model,
+            Plate = motorcycle.Plate
         };
 
         return Ok(motorcycleDto);
@@ -95,7 +95,7 @@ public class MotorcycleController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateMotorcycle(string id, [FromBody] MotorcycleDTO motorcycleDto)
     {
-        var updatedMotorcycle = await _motorcycleService.UpdateMotorcyclePlateAsync(id, motorcycleDto.Placa);
+        var updatedMotorcycle = await _motorcycleService.UpdateMotorcyclePlateAsync(id, motorcycleDto.Plate);
         if (updatedMotorcycle == null)
         {
             return NotFound();
@@ -103,10 +103,10 @@ public class MotorcycleController : ControllerBase
 
         var motorcycleDtoUpdated = new MotorcycleDTO
         {
-            Identificador = updatedMotorcycle.Id,
-            Ano = updatedMotorcycle.Year,
-            Modelo = updatedMotorcycle.Model,
-            Placa = updatedMotorcycle.Plate
+            Id = updatedMotorcycle.Id,
+            Year = updatedMotorcycle.Year,
+            Model = updatedMotorcycle.Model,
+            Plate = updatedMotorcycle.Plate
         };
 
         return Ok(motorcycleDtoUpdated);
@@ -145,10 +145,10 @@ public class MotorcycleController : ControllerBase
 
         var motorcyclesDto = motorcycles.Select(m => new MotorcycleDTO
         {
-            Identificador = m.Id,
-            Ano = m.Year,
-            Modelo = m.Model,
-            Placa = m.Plate
+            Id = m.Id,
+            Year = m.Year,
+            Model = m.Model,
+            Plate = m.Plate
         });
 
         return Ok(motorcyclesDto);
