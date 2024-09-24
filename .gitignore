@@ -66,9 +66,6 @@ artifacts/
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
 
-# Entity Framework
-Migrations/
-
 # JetBrains Rider
 .idea/
 *.sln.iml
