@@ -4,7 +4,16 @@ namespace motcyApi.Domain.Entities;
 
 public class DeliveryPerson
 {
-    public DeliveryPerson(string? id, string name, string cnpj, DateTime dateOfBirth, string licenseNumber, string licenseType)
+    public DeliveryPerson()
+    {
+        Id = string.Empty;
+        Name = string.Empty;
+        Cnpj = string.Empty;
+        DateOfBirth = DateTime.MinValue;
+        LicenseNumber = string.Empty;
+        LicenseType = string.Empty;
+    }
+    public DeliveryPerson(string id, string name, string cnpj, DateTime dateOfBirth, string licenseNumber, string licenseType)
     {
         Id = id;
         Name = name;
@@ -15,14 +24,14 @@ public class DeliveryPerson
     }
 
     [Key]
-    public string? Id { get; set; }
+    public string Id { get; set; }
 
     [Required(ErrorMessage = "Name is required")]
     [StringLength(100, ErrorMessage = "Name can't be longer than 100 characters")]
     public string Name { get; set; }
 
     [Required(ErrorMessage = "CNPJ is required")]
-    [StringLength(14, MinimumLength = 14, ErrorMessage = "CNPJ must be exactly 14 characters")]
+    [StringLength(18, MinimumLength = 18, ErrorMessage = "CNPJ must be exactly 18 characters")]
     public string Cnpj { get; set; }
 
     [Required(ErrorMessage = "DateOfBirth is required")]

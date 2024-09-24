@@ -25,7 +25,7 @@ public class RentalRepository : IRentalRepository
         return await _context.Rentals.Include(r => r.Motorcycle).Include(r => r.DeliveryPerson).ToListAsync();
     }
 
-    public async Task<Rental?> GetRentalByIdAsync(int id)
+    public async Task<Rental?> GetRentalByIdAsync(string id)
     {
         return await _context.Rentals.Include(r => r.Motorcycle).Include(r => r.DeliveryPerson).FirstOrDefaultAsync(r => r.Id == id);
     }
@@ -37,7 +37,7 @@ public class RentalRepository : IRentalRepository
         return rental;
     }
 
-    public async Task<bool> DeleteRentalAsync(int id)
+    public async Task<bool> DeleteRentalAsync(string id)
     {
         var rental = await _context.Rentals.FindAsync(id);
         if (rental == null) return false;

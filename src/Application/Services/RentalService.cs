@@ -20,7 +20,7 @@ public class RentalService : IRentalService
         _deliveryPersonRepository = deliveryPersonRepository;
     }
 
-    public async Task<Rental> ReturnMotorcycleAsync(int rentalId, DateTime returnDate)
+    public async Task<Rental> ReturnMotorcycleAsync(string rentalId, DateTime returnDate)
     {
         var rental = await _rentalRepository.GetRentalByIdAsync(rentalId);
         if (rental == null)
@@ -38,6 +38,8 @@ public class RentalService : IRentalService
         {
             rental.TotalCost += CalculateEarlyReturnPenalty(rental, returnDate);
         }
+
+        rental.EndDate = returnDate;
 
         return await _rentalRepository.UpdateRentalAsync(rental);
     }
@@ -83,37 +85,22 @@ public class RentalService : IRentalService
         return lateDays * lateFeePerDay;
     }
 
-    public async Task<Rental> CreateRentalAsync(
-        string motorcycleId
-        , string deliveryPersonId
-        , int rentalPlan
-        , DateTime startDate
-        , DateTime? endDate
-        , DateTime expectedEndDate
-    )
+    public async Task<Rental> CreateRentalAsync(Rental rental)
     {
-        var motorcycle = await _motorcycleRepository.GetMotorcycleByIdAsync(motorcycleId);
+        var motorcycle = await _motorcycleRepository.GetMotorcycleByIdAsync(rental.MotorcycleId);
         if (motorcycle == null)
         {
             throw new ArgumentException("Motorcycle not found.");
         }
 
-        var deliveryPerson = await _deliveryPersonRepository.GetDeliveryPersonByIdAsync(deliveryPersonId);
+        var deliveryPerson = await _deliveryPersonRepository.GetDeliveryPersonByIdAsync(rental.DeliveryPersonId);
 
         if (deliveryPerson == null)
         {
             throw new ArgumentException("Delivery person not found.");
         }
 
-        decimal totalCost = CalculateRentalCost(rentalPlan, startDate, expectedEndDate);
-
-        var rental = new Rental (
-            motorcycle.Id,
-            deliveryPerson.Id ?? throw new InvalidOperationException("Delivery person not found."),
-            startDate,
-            expectedEndDate,
-            rentalPlan
-        );
+        decimal totalCost = CalculateRentalCost(rental.RentalPlan, rental.StartDate, rental.ExpectedEndDate);
 
         return await _rentalRepository.AddRentalAsync(rental);
     }
@@ -123,7 +110,7 @@ public class RentalService : IRentalService
         return await _rentalRepository.GetAllRentalsAsync();
     }
 
-    public async Task<Rental> GetRentalByIdAsync(int id)
+    public async Task<Rental> GetRentalByIdAsync(string id)
     {
         return await _rentalRepository.GetRentalByIdAsync(id) ?? throw new InvalidOperationException("Rental not found.");
     }

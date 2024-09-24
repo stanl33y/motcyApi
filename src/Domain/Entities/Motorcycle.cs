@@ -4,6 +4,13 @@ namespace motcyApi.Domain.Entities;
 
 public class Motorcycle
 {
+    public Motorcycle()
+    {
+        Id = string.Empty;
+        Model = string.Empty;
+        Plate = string.Empty;
+    }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Motorcycle"/> class.
     /// </summary>
@@ -30,7 +37,7 @@ public class Motorcycle
     public string Model { get; set; }
 
     [Required(ErrorMessage = "Plate is required")]
-    [StringLength(7, MinimumLength = 7, ErrorMessage = "Plate must be exactly 7 characters ex.: CDX-0101")]
+    [StringLength(8, MinimumLength = 8, ErrorMessage = "Plate must be exactly 8 characters ex.: CDX-0101")]
     public string Plate { get; set; }
 
     public ICollection<Rental> Rentals { get; set; } = new List<Rental>();

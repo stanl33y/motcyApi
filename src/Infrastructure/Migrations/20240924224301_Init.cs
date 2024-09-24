@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -18,11 +18,10 @@ namespace motcyApi.Migrations
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Cnpj = table.Column<string>(type: "character varying(14)", maxLength: 14, nullable: false),
+                    Cnpj = table.Column<string>(type: "character varying(17)", maxLength: 17, nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LicenseNumber = table.Column<string>(type: "character varying(11)", maxLength: 11, nullable: false),
-                    LicenseType = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: false),
-                    LicenseImage = table.Column<string>(type: "text", nullable: false)
+                    LicenseType = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -44,15 +43,28 @@ namespace motcyApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Rentals",
+                name: "Notifications",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Message = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Rentals",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "text", nullable: false),
                     MotorcycleId = table.Column<string>(type: "text", nullable: false),
                     DeliveryPersonId = table.Column<string>(type: "text", nullable: false),
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     ExpectedEndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     RentalPlan = table.Column<int>(type: "integer", nullable: false),
                     TotalCost = table.Column<decimal>(type: "numeric", nullable: false),
@@ -107,6 +119,9 @@ namespace motcyApi.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Notifications");
+
             migrationBuilder.DropTable(
                 name: "Rentals");
 

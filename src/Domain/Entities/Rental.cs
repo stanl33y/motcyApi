@@ -5,8 +5,15 @@ namespace motcyApi.Domain.Entities;
 
 public class Rental
 {
-    public Rental(string motorcycleId, string deliveryPersonId, DateTime startDate, DateTime expectedEndDate, int rentalPlan)
+    public Rental()
     {
+        Id = string.Empty;
+        MotorcycleId = string.Empty;
+        DeliveryPersonId = string.Empty;
+    }
+    public Rental(string id, string motorcycleId, string deliveryPersonId, DateTime startDate, DateTime expectedEndDate, int rentalPlan)
+    {
+        Id = id;
         MotorcycleId = motorcycleId;
         DeliveryPersonId = deliveryPersonId;
         StartDate = startDate;
@@ -15,7 +22,7 @@ public class Rental
     }
 
     [Key]
-    public int Id { get; set; }
+    public string Id { get; set; }
 
     [Required]
     [ForeignKey("Motorcycle")]

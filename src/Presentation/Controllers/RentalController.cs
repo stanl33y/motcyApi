@@ -1,7 +1,10 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using motcyApi.Application.DTOs;
+using motcyApi.Application.DTOs.Validators;
 using motcyApi.Application.Interfaces;
+using motcyApi.Domain.Entities;
 
 namespace motcyApi.Presentation.Controllers;
 
@@ -13,10 +16,12 @@ namespace motcyApi.Presentation.Controllers;
 public class RentalController : ControllerBase
 {
     private readonly IRentalService _rentalService;
+    private readonly IMapper _mapper;
 
-    public RentalController(IRentalService rentalService)
+    public RentalController(IRentalService rentalService, IMapper mapper)
     {
         _rentalService = rentalService;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -43,18 +48,26 @@ public class RentalController : ControllerBase
     /// <response code="400">Error creating rental</response>
     [Authorize(Roles = "admin, deliveryperson")]
     [HttpPost]
-    public async Task<ActionResult<RentalDTO>> CreateRental([FromBody] RentalDTO rentalDto)
+    public async Task<ActionResult<RentalDTO>> CreateRental([FromBody] RentalCreateDTO rentalDto)
     {
-        var rental = await _rentalService.CreateRentalAsync(
-            rentalDto.MotorcycleId,
-            rentalDto.DeliveryPersonId,
-            rentalDto.RentalPlan,
-            rentalDto.StartDate,
-            rentalDto.EndDate,
-            rentalDto.ExpectedEndDate
-        );
+        var validator = new RentalCreateDTOValidator();
 
-        if (rental == null)
+        var results = validator.Validate(rentalDto);
+
+        if (!results.IsValid)
+        {
+            var errors = results.Errors.Select(x => x.ErrorMessage).ToList();
+            return BadRequest(new { errors });
+        }
+
+        var rental = _mapper.Map<RentalCreateDTO, Rental>(rentalDto);
+
+        rental.Id = Guid.NewGuid().ToString();
+        rental.ExpectedEndDate = rental.StartDate.AddDays(rental.RentalPlan);
+
+        var result = await _rentalService.CreateRentalAsync(rental);
+
+        if (result == null)
         {
             return BadRequest("Error creating rental.");
         }
@@ -71,8 +84,8 @@ public class RentalController : ControllerBase
     /// <response code="200">Rental successfully updated with return date</response>
     /// <response code="404">Rental not found</response>
     [Authorize(Roles = "admin, deliveryperson")]
-    [HttpPut("{id}/devolucao")]
-    public async Task<ActionResult<RentalDTO>> ReturnMotorcycle(int id, [FromBody] ReturnDateDTO returnDate)
+    [HttpPut("{id}/return")]
+    public async Task<ActionResult<RentalDTO>> ReturnMotorcycle(string id, [FromBody] ReturnDateDTO returnDate)
     {
         var rental = await _rentalService.ReturnMotorcycleAsync(id, returnDate.ReturnDate);
         if (rental == null)
@@ -80,16 +93,7 @@ public class RentalController : ControllerBase
             return NotFound();
         }
 
-        var rentalDto = new RentalDTO (
-            rental.Id,
-            rental.DeliveryPersonId,
-            rental.MotorcycleId,
-            rental.StartDate,
-            rental.EndDate,
-            rental.ExpectedEndDate,
-            rental.RentalPlan,
-            rental.TotalCost
-        );
+        var rentalDto = _mapper.Map<Rental, RentalDTO>(rental);
 
         return Ok(rentalDto);
     }
@@ -103,7 +107,7 @@ public class RentalController : ControllerBase
     /// <response code="404">Rental not found</response>
     [Authorize(Roles = "admin, deliveryperson")]
     [HttpGet("{id}")]
-    public async Task<ActionResult<RentalDTO>> GetRentalById(int id)
+    public async Task<ActionResult<RentalDTO>> GetRentalById(string id)
     {
         var rental = await _rentalService.GetRentalByIdAsync(id);
         if (rental == null)
@@ -111,16 +115,7 @@ public class RentalController : ControllerBase
             return NotFound();
         }
 
-        var rentalDto = new RentalDTO (
-            rental.Id,
-            rental.DeliveryPersonId,
-            rental.MotorcycleId,
-            rental.StartDate,
-            rental.EndDate,
-            rental.ExpectedEndDate,
-            rental.RentalPlan,
-            rental.TotalCost
-        );
+        var rentalDto = _mapper.Map<Rental, RentalDTO>(rental);
 
         return Ok(rentalDto);
     }
@@ -141,16 +136,7 @@ public class RentalController : ControllerBase
             return new List<RentalDTO>();
         }
 
-        var rentalsDto = rentals.Select(rental => new RentalDTO (
-            rental.Id,
-            rental.DeliveryPersonId,
-            rental.MotorcycleId,
-            rental.StartDate,
-            rental.EndDate,
-            rental.ExpectedEndDate,
-            rental.RentalPlan,
-            rental.TotalCost
-        )).ToList();
+        var rentalsDto = _mapper.Map<List<Rental>, List<RentalDTO>>(rentals.ToList());
 
         return Ok(rentalsDto);
     }

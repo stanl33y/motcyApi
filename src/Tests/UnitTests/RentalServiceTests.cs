@@ -44,11 +44,11 @@ public class RentalServiceTests: TestBase
         _motorcycleRepositoryMock.Setup(repo => repo.GetMotorcycleByIdAsync("moto01")).ReturnsAsync(motorcycle);
         _deliveryPersonRepositoryMock.Setup(repo => repo.GetDeliveryPersonByIdAsync("del01")).ReturnsAsync(deliveryPerson);
 
-        var rental = new Rental(motorcycle.Id, deliveryPerson.Id ?? "", DateTime.Now, DateTime.Now.AddDays(7), 7);
+        var rental = new Rental(Guid.NewGuid().ToString(), motorcycle.Id, deliveryPerson.Id ?? "", DateTime.Now, DateTime.Now.AddDays(7), 7);
         _rentalRepositoryMock.Setup(repo => repo.AddRentalAsync(It.IsAny<Rental>())).ReturnsAsync(rental);
 
         // Act
-        var result = await _rentalService.CreateRentalAsync("moto01", "del01", 7, DateTime.Now, DateTime.Now.AddDays(7), DateTime.Now.AddDays(7));
+        var result = await _rentalService.CreateRentalAsync(rental);
 
         // Assert
         Assert.NotNull(result);

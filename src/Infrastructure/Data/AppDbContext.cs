@@ -26,6 +26,34 @@ public class AppDbContext : DbContext
             .HasIndex(d => d.LicenseNumber)
             .IsUnique();
 
+        modelBuilder.Entity<DeliveryPerson>()
+            .Property(d => d.DateOfBirth)
+            .HasConversion(
+                v => DateTime.SpecifyKind(v, DateTimeKind.Utc),
+                v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
+            );
+
+        modelBuilder.Entity<Rental>()
+            .Property(d => d.StartDate)
+            .HasConversion(
+                v => DateTime.SpecifyKind(v, DateTimeKind.Utc),
+                v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
+            );
+
+        modelBuilder.Entity<Rental>()
+            .Property(d => d.EndDate)
+            .HasConversion(
+                v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : (DateTime?)null,
+                v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : (DateTime?)null
+            );
+
+        modelBuilder.Entity<Rental>()
+            .Property(d => d.ExpectedEndDate)
+            .HasConversion(
+                v => DateTime.SpecifyKind(v, DateTimeKind.Utc),
+                v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
+            );
+
         // Relationships
         modelBuilder.Entity<Rental>()
             .HasOne(r => r.Motorcycle)

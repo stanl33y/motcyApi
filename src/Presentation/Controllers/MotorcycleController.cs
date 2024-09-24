@@ -1,6 +1,8 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using motcyApi.Application.DTOs;
+using motcyApi.Application.DTOs.Validators;
 using motcyApi.Application.Interfaces;
 using motcyApi.Domain.Entities;
 
@@ -14,10 +16,12 @@ namespace motcyApi.Presentation.Controllers;
 public class MotorcycleController : ControllerBase
 {
     private readonly IMotorcycleService _motorcycleService;
+    private readonly IMapper _mapper;
 
-    public MotorcycleController(IMotorcycleService motorcycleService)
+    public MotorcycleController(IMotorcycleService motorcycleService, IMapper mapper)
     {
         _motorcycleService = motorcycleService;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -28,7 +32,6 @@ public class MotorcycleController : ControllerBase
     ///
     ///     POST /api/v1/motorcycles
     ///     {
-    ///        "id": "123",
     ///        "year": 2020,
     ///        "model": "Yamaha XTZ",
     ///        "plate": "XYZ-1234"
@@ -42,16 +45,23 @@ public class MotorcycleController : ControllerBase
     /// <response code="400">Error creating motorcycle</response>
     [Authorize(Roles = "admin")]
     [HttpPost]
-    public async Task<IActionResult> CreateMotorcycle([FromBody] MotorcycleDTO motorcycleDto)
+    public async Task<IActionResult> CreateMotorcycle([FromBody] MotorcycleCreateDTO motorcycleDto)
     {
-        var result = await _motorcycleService.AddMotorcycleAsync(
-            new Motorcycle (
-                motorcycleDto.Id,
-                motorcycleDto.Year,
-                motorcycleDto.Model,
-                motorcycleDto.Plate
-            )
-        );
+        var validator = new MotorcycleCreateDTOValidator();
+
+        var results = validator.Validate(motorcycleDto);
+
+        if (!results.IsValid)
+        {
+            var errors = results.Errors.Select(x => x.ErrorMessage).ToList();
+            return BadRequest(new { errors });
+        }
+
+        var motorcycle = _mapper.Map<MotorcycleCreateDTO, Motorcycle>(motorcycleDto);
+
+        motorcycle.Id = Guid.NewGuid().ToString();
+
+        var result = await _motorcycleService.AddMotorcycleAsync(motorcycle);
 
         if (result == null)
         {
@@ -78,12 +88,7 @@ public class MotorcycleController : ControllerBase
             return NotFound();
         }
 
-        var motorcycleDto = new MotorcycleDTO (
-            motorcycle.Id,
-            motorcycle.Year,
-            motorcycle.Model,
-            motorcycle.Plate
-        );
+        var motorcycleDto = _mapper.Map<Motorcycle, MotorcycleDTO>(motorcycle);
 
         return Ok(motorcycleDto);
     }
@@ -106,12 +111,7 @@ public class MotorcycleController : ControllerBase
             return NotFound();
         }
 
-        var motorcycleDtoUpdated = new MotorcycleDTO (
-            updatedMotorcycle.Id,
-            updatedMotorcycle.Year,
-            updatedMotorcycle.Model,
-            updatedMotorcycle.Plate
-        );
+        var motorcycleDtoUpdated = _mapper.Map<Motorcycle, MotorcycleDTO>(updatedMotorcycle);
 
         return Ok(motorcycleDtoUpdated);
     }
@@ -147,12 +147,7 @@ public class MotorcycleController : ControllerBase
     {
         var motorcycles = await _motorcycleService.GetAllMotorcyclesAsync();
 
-        var motorcyclesDto = motorcycles.Select(m => new MotorcycleDTO (
-            m.Id,
-            m.Year,
-            m.Model,
-            m.Plate
-        ));
+        var motorcyclesDto = _mapper.Map<List<Motorcycle>, List<MotorcycleDTO>>(motorcycles.ToList());
 
         return Ok(motorcyclesDto);
     }

@@ -3,43 +3,32 @@ namespace motcyApi.Application.DTOs;
 /// <summary>
 /// Data Transfer Object used for delivery person registration and details.
 /// </summary>
-public class DeliveryPersonDTO
+public class DeliveryPersonRegisterDTO
 {
-    public DeliveryPersonDTO() {
-        Id = string.Empty;
-        Name = string.Empty;
-        Cnpj = string.Empty;
-        LicenseNumber = string.Empty;
-        LicenseType = string.Empty;
-        ImageLicense = string.Empty;
-    }
-
     /// <summary>
     /// Initializes a new instance of the DeliveryPersonDTO class.
     /// </summary>
-    /// <param name="id">The unique identifier of the delivery person.</param>
     /// <param name="name">The full name of the delivery person.</param>
     /// <param name="cnpj">The CNPJ (Cadastro Nacional da Pessoa Jurídica) of the delivery person.</param>
     /// <param name="dateOfBirth">The date of birth of the delivery person.</param>
     /// <param name="licenseNumber">The license number (CNH) of the delivery person.</param>
     /// <param name="licenseType">The type of the license (CNH) of the delivery person.</param>
-    /// <param name="imageLicense">The base64 encoded image of the license (CNH).</param>
-    public DeliveryPersonDTO(string id, string name, string cnpj, DateTime dateOfBirth, string licenseNumber, string licenseType, string imageLicense)
+    /// <param name="imageLicence">The base64 encoded image of the license (CNH).</param>
+    /// <param name="email">The email of the delivery person.</param>
+    /// <param name="password">The password of the delivery person.</param>
+    /// <param name="passwordConfirmation">The password confirmation of the delivery person.</param>
+    public DeliveryPersonRegisterDTO(string name, string cnpj, DateTime dateOfBirth, string licenseNumber, string licenseType, string imageLicence, string email, string password, string passwordConfirmation)
     {
-        Id = id;
         Name = name;
         Cnpj = cnpj;
         DateOfBirth = dateOfBirth;
         LicenseNumber = licenseNumber;
         LicenseType = licenseType;
-        ImageLicense = imageLicense;
+        ImageLicence = imageLicence;
+        Email = email;
+        Password = password;
+        PasswordConfirmation = passwordConfirmation;
     }
-
-    /// <summary>
-    /// The unique identifier of the delivery person.
-    /// </summary>
-    /// <example>123</example>
-    public string Id { get; set; }
 
     /// <summary>
     /// The full name of the delivery person.
@@ -75,5 +64,23 @@ public class DeliveryPersonDTO
     /// The base64 encoded image of the license (CNH).
     /// </summary>
     /// <example>base64EncodedImageString</example>
-    public string ImageLicense { get; set; }
+    public string ImageLicence { get; set; }
+
+    /// <summary>
+    /// The email of the delivery person.
+    /// </summary>
+    /// <example>test@gmail.com</example>
+    public string Email { get; set; }
+
+    /// <summary>
+    /// The password of the delivery person.
+    /// </summary>
+    /// <example>password</example>
+    public string Password { get; set; }
+
+    /// <summary>
+    /// The password confirmation of the delivery person.
+    /// </summary>
+    /// <example>password</example>
+    public string PasswordConfirmation { get; set; }
 }

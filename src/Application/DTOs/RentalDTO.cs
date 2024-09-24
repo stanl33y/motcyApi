@@ -5,6 +5,14 @@ namespace motcyApi.Application.DTOs;
 /// </summary>
 public class RentalDTO
 {
+
+    public RentalDTO()
+    {
+        Id = string.Empty;
+        DeliveryPersonId = string.Empty;
+        MotorcycleId = string.Empty;
+    }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="RentalDTO"/> class.
     /// </summary>
@@ -16,7 +24,7 @@ public class RentalDTO
     /// <param name="expectedEndDate">The estimated end date for the rental.</param>
     /// <param name="rentalPlan">The rental plan.</param>
     /// <param name="totalCost">The total value of the rental.</param>
-    public RentalDTO(int? id, string deliveryPersonId, string motorcycleId, DateTime startDate, DateTime? endDate,
+    public RentalDTO(string id, string deliveryPersonId, string motorcycleId, DateTime startDate, DateTime? endDate,
         DateTime expectedEndDate, int rentalPlan, decimal totalCost)
     {
         Id = id;
@@ -32,7 +40,7 @@ public class RentalDTO
     /// <summary>
     /// The unique identifier of the rental.
     /// </summary>
-    public int? Id { get; set; }
+    public string Id { get; set; }
 
     /// <summary>
     /// The unique identifier of the delivery person.

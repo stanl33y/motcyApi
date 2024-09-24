@@ -12,6 +12,7 @@ using motcyApi.Domain.Repositories;
 using motcyApi.Infrastructure.Data;
 using motcyApi.Infrastructure.Data.Messaging;
 using motcyApi.Infrastructure.Data.Repositories;
+using motcyApi.Infrastructure.Mappers;
 using motcyApi.Presentation.Filters;
 using motcyApi.Presentation.Middlewares;
 
@@ -32,6 +33,9 @@ builder.Services.AddScoped<IMotorcycleService, MotorcycleService>();
 builder.Services.AddScoped<IRentalService, RentalService>();
 builder.Services.AddScoped<IDeliveryPersonService, DeliveryPersonService>();
 builder.Services.AddScoped<IStorageService, LocalFileStorageService>();
+
+// Mappers
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // Handlers
 builder.Services.AddScoped<MotorcycleRegisteredEventHandler>();
@@ -122,6 +126,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
         };
     });
+
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 

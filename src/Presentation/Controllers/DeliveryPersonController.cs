@@ -1,7 +1,9 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using motcyApi.Application.DTOs;
+using motcyApi.Application.DTOs.Validators;
 using motcyApi.Application.Interfaces;
-using motcyApi.Applications.DTOs;
 using motcyApi.Domain.Entities;
 
 namespace motcyApi.Presentation.Controllers;
@@ -15,11 +17,13 @@ public class DeliveryPersonController : ControllerBase
 {
     private readonly IDeliveryPersonService _deliveryPersonService;
     private readonly IStorageService _fileService;
+    private readonly IMapper _mapper;
 
-    public DeliveryPersonController(IDeliveryPersonService deliveryPersonService, IStorageService fileService)
+    public DeliveryPersonController(IDeliveryPersonService deliveryPersonService, IStorageService fileService, IMapper mapper)
     {
         _deliveryPersonService = deliveryPersonService;
         _fileService = fileService;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -30,13 +34,15 @@ public class DeliveryPersonController : ControllerBase
     ///
     ///     POST /api/v1/deliverypersons
     ///     {
-    ///        "id": "123",
     ///        "name": "John Doe",
-    ///        "cnpj": "12345678000199",
+    ///        "cnpj": "12.345.678/0001-99",
     ///        "date_of_birth": "1990-01-01",
     ///        "license_number": "XYZ123456",
     ///        "license_type": "A",
     ///        "image_license": "base64EncodedImageString"
+    ///        "email": "test@gmail.com"
+    ///        "password": "password"
+    ///        "password_confirmation": "password"
     ///     }
     ///
     /// Registers a new delivery person with the provided details.
@@ -47,18 +53,25 @@ public class DeliveryPersonController : ControllerBase
     /// <response code="400">Error registering delivery person</response>
     [AllowAnonymous]
     [HttpPost]
-    public async Task<IActionResult> RegisterDeliveryPerson([FromBody] DeliveryPersonDTO deliveryPersonDto)
+    public async Task<IActionResult> RegisterDeliveryPerson([FromBody] DeliveryPersonRegisterDTO deliveryPersonDto)
     {
-        var result = await _deliveryPersonService.RegisterDeliveryPersonAsync(new DeliveryPerson (
-            deliveryPersonDto.Id,
-            deliveryPersonDto.Name,
-            deliveryPersonDto.Cnpj,
-            deliveryPersonDto.DateOfBirth,
-            deliveryPersonDto.LicenseNumber,
-            deliveryPersonDto.LicenseType
-        ));
+        var validator = new DeliveryPersonRegisterDTOValidator();
 
-        string filePath = await _fileService.SaveFileFromBase64Async(deliveryPersonDto.ImageLicence, $"{deliveryPersonDto.Id}.png");
+        var results = validator.Validate(deliveryPersonDto);
+
+        if (!results.IsValid)
+        {
+            var errors = results.Errors.Select(x => x.ErrorMessage).ToList();
+            return BadRequest(new { errors });
+        }
+
+        var deliveryPerson = _mapper.Map<DeliveryPersonRegisterDTO, DeliveryPerson>(deliveryPersonDto);
+
+        deliveryPerson.Id = Guid.NewGuid().ToString();
+
+        var result = await _deliveryPersonService.RegisterDeliveryPersonAsync(deliveryPerson);
+
+        string filePath = await _fileService.SaveFileFromBase64Async(deliveryPersonDto.ImageLicence, $"{deliveryPerson.Id}.png");
 
         if (result == null)
         {
@@ -87,15 +100,9 @@ public class DeliveryPersonController : ControllerBase
 
         var imageBase64 = await _fileService.GetFileAsBase64Async($"{deliveryPerson.Id}.png");
 
-        var deliveryPersonDto = new DeliveryPersonDTO(
-            deliveryPerson.Id ?? string.Empty,
-            deliveryPerson.Name,
-            deliveryPerson.Cnpj,
-            deliveryPerson.DateOfBirth,
-            deliveryPerson.LicenseNumber,
-            deliveryPerson.LicenseType,
-            imageBase64
-        );
+        var deliveryPersonDto = _mapper.Map<DeliveryPerson, DeliveryPersonDTO>(deliveryPerson);
+
+        deliveryPersonDto.ImageLicense = imageBase64;
 
         return Ok(deliveryPersonDto);
     }
@@ -143,15 +150,11 @@ public class DeliveryPersonController : ControllerBase
         {
             var imageBase64 = await _fileService.GetFileAsBase64Async($"{deliveryPerson.Id}.png");
 
-            deliveryPeopleDto.Add(new DeliveryPersonDTO(
-                deliveryPerson.Id ?? string.Empty,
-                deliveryPerson.Name,
-                deliveryPerson.Cnpj,
-                deliveryPerson.DateOfBirth,
-                deliveryPerson.LicenseNumber,
-                deliveryPerson.LicenseType,
-                imageBase64
-            ));
+            var deliveryPersonDto = _mapper.Map<DeliveryPerson, DeliveryPersonDTO>(deliveryPerson);
+
+            deliveryPersonDto.ImageLicense = imageBase64;
+
+            deliveryPeopleDto.Add(deliveryPersonDto);
         }
 
         return Ok(deliveryPeopleDto);
