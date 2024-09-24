@@ -4,6 +4,30 @@
 public class RentalDTO
 {
     /// <summary>
+    /// Initializes a new instance of the <see cref="RentalDTO"/> class.
+    /// </summary>
+    /// <param name="id">The unique identifier of the rental.</param>
+    /// <param name="deliveryPersonId">The unique identifier of the delivery person.</param>
+    /// <param name="motorcycleId">The unique identifier of the motorcycle.</param>
+    /// <param name="startDate">The rental start date.</param>
+    /// <param name="endDate">The rental end date.</param>
+    /// <param name="expectedEndDate">The estimated end date for the rental.</param>
+    /// <param name="rentalPlan">The rental plan.</param>
+    /// <param name="totalCost">The total value of the rental.</param>
+    public RentalDTO(int? id, string deliveryPersonId, string motorcycleId, DateTime startDate, DateTime? endDate,
+        DateTime expectedEndDate, int rentalPlan, decimal totalCost)
+    {
+        Id = id;
+        DeliveryPersonId = deliveryPersonId;
+        MotorcycleId = motorcycleId;
+        StartDate = startDate;
+        EndDate = endDate;
+        ExpectedEndDate = expectedEndDate;
+        RentalPlan = rentalPlan;
+        TotalCost = totalCost;
+    }
+
+    /// <summary>
     /// The unique identifier of the rental.
     /// </summary>
     public int? Id { get; set; }
@@ -48,4 +72,5 @@ public class RentalDTO
     /// The total value of the rental.
     /// </summary>
     public decimal TotalCost { get; set; }
+
 }

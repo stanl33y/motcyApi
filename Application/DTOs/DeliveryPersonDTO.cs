@@ -4,6 +4,27 @@
 public class DeliveryPersonDTO
 {
     /// <summary>
+    /// Initializes a new instance of the DeliveryPersonDTO class.
+    /// </summary>
+    /// <param name="id">The unique identifier of the delivery person.</param>
+    /// <param name="name">The full name of the delivery person.</param>
+    /// <param name="cnpj">The CNPJ (Cadastro Nacional da Pessoa Jurídica) of the delivery person.</param>
+    /// <param name="dateOfBirth">The date of birth of the delivery person.</param>
+    /// <param name="licenseNumber">The license number (CNH) of the delivery person.</param>
+    /// <param name="licenseType">The type of the license (CNH) of the delivery person.</param>
+    /// <param name="imageLicence">The base64 encoded image of the license (CNH).</param>
+    public DeliveryPersonDTO(string id, string name, string cnpj, DateTime dateOfBirth, string licenseNumber, string licenseType, string imageLicence)
+    {
+        Id = id;
+        Name = name;
+        Cnpj = cnpj;
+        DateOfBirth = dateOfBirth;
+        LicenseNumber = licenseNumber;
+        LicenseType = licenseType;
+        ImageLicence = imageLicence;
+    }
+
+    /// <summary>
     /// The unique identifier of the delivery person.
     /// </summary>
     /// <example>123</example>

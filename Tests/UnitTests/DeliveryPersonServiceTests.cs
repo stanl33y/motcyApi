@@ -21,14 +21,14 @@ public class DeliveryPersonServiceTests : TestBase
     public async Task RegisterDeliveryPersonAsync_ShouldRegisterDeliveryPerson()
     {
         // Arrange
-        var deliveryPerson = new DeliveryPerson
-        {
-            Id = "del01",
-            Name = "John Doe",
-            Cnpj = "12345678901234",
-            LicenseNumber = "12345678900",
-            LicenseType = "A"
-        };
+        var deliveryPerson = new DeliveryPerson(
+            "del01",
+            "John Doe",
+            "12345678901234",
+            new DateTime(1990, 1, 1),
+            "12345678900",
+            "A"
+        );
 
         _deliveryPersonRepositoryMock.Setup(repo => repo.AddDeliveryPersonAsync(It.IsAny<DeliveryPerson>()))
             .ReturnsAsync(deliveryPerson);
@@ -46,11 +46,15 @@ public class DeliveryPersonServiceTests : TestBase
     public async Task GetDeliveryPersonByIdAsync_ShouldReturnDeliveryPerson()
     {
         // Arrange
-        var deliveryPerson = new DeliveryPerson
-        {
-            Id = "del01",
-            Name = "Jane Doe"
-        };
+        var deliveryPerson = new DeliveryPerson(
+            "del01",
+            "Jane Doe",
+            "12345678901234",
+            new DateTime(1990, 1, 1),
+            "12345678900",
+            "A"
+        );
+
         _deliveryPersonRepositoryMock.Setup(repo => repo.GetDeliveryPersonByIdAsync("del01"))
             .ReturnsAsync(deliveryPerson);
 
@@ -68,9 +72,25 @@ public class DeliveryPersonServiceTests : TestBase
         // Arrange
         var deliveryPeople = new List<DeliveryPerson>
         {
-            new DeliveryPerson { Id = "del01", Name = "John Doe" },
-            new DeliveryPerson { Id = "del02", Name = "Jane Doe" }
+            new DeliveryPerson(
+                "del01",
+                "John Doe",
+                "12345678901234",
+                new DateTime(1990, 1, 1),
+                "12345678900",
+                "A"
+            ),
+
+            new DeliveryPerson(
+                "del02",
+                "Jane Doe",
+                "12345678901234",
+                new DateTime(1990, 1, 1),
+                "12345678900",
+                "A"
+            ),
         };
+
         _deliveryPersonRepositoryMock.Setup(repo => repo.GetAllDeliveryPeopleAsync())
             .ReturnsAsync(deliveryPeople);
 

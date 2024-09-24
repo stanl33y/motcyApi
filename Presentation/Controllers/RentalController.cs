@@ -76,17 +76,16 @@ public class RentalController : ControllerBase
             return NotFound();
         }
 
-        var rentalDto = new RentalDTO
-        {
-            Id = rental.Id,
-            MotorcycleId = rental.MotorcycleId,
-            DeliveryPersonId = rental.DeliveryPersonId,
-            RentalPlan = rental.RentalPlan,
-            StartDate = rental.StartDate,
-            EndDate = rental.EndDate,
-            ExpectedEndDate = rental.ExpectedEndDate,
-            TotalCost = rental.TotalCost,
-        };
+        var rentalDto = new RentalDTO (
+            rental.Id,
+            rental.DeliveryPersonId,
+            rental.MotorcycleId,
+            rental.StartDate,
+            rental.EndDate,
+            rental.ExpectedEndDate,
+            rental.RentalPlan,
+            rental.TotalCost
+        );
 
         return Ok(rentalDto);
     }
@@ -108,17 +107,16 @@ public class RentalController : ControllerBase
             return NotFound();
         }
 
-        var rentalDto = new RentalDTO
-        {
-            Id = rental.Id,
-            MotorcycleId = rental.MotorcycleId,
-            DeliveryPersonId = rental.DeliveryPersonId,
-            RentalPlan = rental.RentalPlan,
-            StartDate = rental.StartDate,
-            EndDate = rental.EndDate,
-            ExpectedEndDate = rental.ExpectedEndDate,
-            TotalCost = rental.TotalCost,
-        };
+        var rentalDto = new RentalDTO (
+            rental.Id,
+            rental.DeliveryPersonId,
+            rental.MotorcycleId,
+            rental.StartDate,
+            rental.EndDate,
+            rental.ExpectedEndDate,
+            rental.RentalPlan,
+            rental.TotalCost
+        );
 
         return Ok(rentalDto);
     }
@@ -139,17 +137,16 @@ public class RentalController : ControllerBase
             return new List<RentalDTO>();
         }
 
-        var rentalsDto = rentals.Select(rental => new RentalDTO
-        {
-            Id = rental.Id,
-            MotorcycleId = rental.MotorcycleId,
-            DeliveryPersonId = rental.DeliveryPersonId,
-            RentalPlan = rental.RentalPlan,
-            StartDate = rental.StartDate,
-            EndDate = rental.EndDate,
-            ExpectedEndDate = rental.ExpectedEndDate,
-            TotalCost = rental.TotalCost,
-        }).ToList();
+        var rentalsDto = rentals.Select(rental => new RentalDTO (
+            rental.Id,
+            rental.DeliveryPersonId,
+            rental.MotorcycleId,
+            rental.StartDate,
+            rental.EndDate,
+            rental.ExpectedEndDate,
+            rental.RentalPlan,
+            rental.TotalCost
+        )).ToList();
 
         return Ok(rentalsDto);
     }

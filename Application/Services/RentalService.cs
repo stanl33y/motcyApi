@@ -93,6 +93,7 @@ public class RentalService : IRentalService
         }
 
         var deliveryPerson = await _deliveryPersonRepository.GetDeliveryPersonByIdAsync(deliveryPersonId);
+
         if (deliveryPerson == null)
         {
             throw new ArgumentException("Delivery person not found.");
@@ -100,16 +101,13 @@ public class RentalService : IRentalService
 
         decimal totalCost = CalculateRentalCost(rentalPlan, startDate, expectedEndDate);
 
-        var rental = new Rental
-        {
-            MotorcycleId = motorcycle.Id,
-            DeliveryPersonId = deliveryPerson.Id,
-            StartDate = startDate,
-            EndDate = endDate,
-            ExpectedEndDate = expectedEndDate,
-            TotalCost = totalCost,
-            RentalPlan = rentalPlan
-        };
+        var rental = new Rental (
+            motorcycle.Id,
+            deliveryPerson.Id ?? throw new InvalidOperationException("Delivery person not found."),
+            startDate,
+            expectedEndDate,
+            rentalPlan
+        );
 
         return await _rentalRepository.AddRentalAsync(rental);
     }
@@ -121,7 +119,7 @@ public class RentalService : IRentalService
 
     public async Task<Rental> GetRentalByIdAsync(int id)
     {
-        return await _rentalRepository.GetRentalByIdAsync(id);
+        return await _rentalRepository.GetRentalByIdAsync(id) ?? throw new InvalidOperationException("Rental not found.");
     }
 
     private decimal CalculateRentalCost(int rentalPlan, DateTime startDate, DateTime expectedEndDate)

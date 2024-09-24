@@ -44,15 +44,14 @@ public class DeliveryPersonController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> RegisterDeliveryPerson([FromBody] DeliveryPersonDTO deliveryPersonDto)
     {
-        var result = await _deliveryPersonService.RegisterDeliveryPersonAsync(new DeliveryPerson
-        {
-            Id = deliveryPersonDto.Id,
-            Name = deliveryPersonDto.Name,
-            Cnpj = deliveryPersonDto.Cnpj,
-            DateOfBirth = deliveryPersonDto.DateOfBirth,
-            LicenseNumber = deliveryPersonDto.LicenseNumber,
-            LicenseType = deliveryPersonDto.LicenseType
-        });
+        var result = await _deliveryPersonService.RegisterDeliveryPersonAsync(new DeliveryPerson (
+            deliveryPersonDto.Id,
+            deliveryPersonDto.Name,
+            deliveryPersonDto.Cnpj,
+            deliveryPersonDto.DateOfBirth,
+            deliveryPersonDto.LicenseNumber,
+            deliveryPersonDto.LicenseType
+        ));
 
         string filePath = await _fileService.SaveFileFromBase64Async(deliveryPersonDto.ImageLicence, $"{deliveryPersonDto.Id}.png");
 
@@ -83,16 +82,15 @@ public class DeliveryPersonController : ControllerBase
 
         var imageBase64 = await _fileService.GetFileAsBase64Async($"{deliveryPerson.Id}.png");
 
-        var deliveryPersonDto = new DeliveryPersonDTO
-        {
-            Id = deliveryPerson.Id,
-            Name = deliveryPerson.Name,
-            Cnpj = deliveryPerson.Cnpj,
-            DateOfBirth = deliveryPerson.DateOfBirth,
-            LicenseNumber = deliveryPerson.LicenseNumber,
-            LicenseType = deliveryPerson.LicenseType,
-            ImageLicence = imageBase64
-        };
+        var deliveryPersonDto = new DeliveryPersonDTO(
+            deliveryPerson.Id ?? string.Empty,
+            deliveryPerson.Name,
+            deliveryPerson.Cnpj,
+            deliveryPerson.DateOfBirth,
+            deliveryPerson.LicenseNumber,
+            deliveryPerson.LicenseType,
+            imageBase64
+        );
 
         return Ok(deliveryPersonDto);
     }
@@ -140,16 +138,15 @@ public class DeliveryPersonController : ControllerBase
         {
             var imageBase64 = await _fileService.GetFileAsBase64Async($"{deliveryPerson.Id}.png");
 
-            deliveryPeopleDto.Add(new DeliveryPersonDTO
-            {
-                Id = deliveryPerson.Id,
-                Name = deliveryPerson.Name,
-                Cnpj = deliveryPerson.Cnpj,
-                DateOfBirth = deliveryPerson.DateOfBirth,
-                LicenseNumber = deliveryPerson.LicenseNumber,
-                LicenseType = deliveryPerson.LicenseType,
-                ImageLicence = imageBase64
-            });
+            deliveryPeopleDto.Add(new DeliveryPersonDTO(
+                deliveryPerson.Id ?? string.Empty,
+                deliveryPerson.Name,
+                deliveryPerson.Cnpj,
+                deliveryPerson.DateOfBirth,
+                deliveryPerson.LicenseNumber,
+                deliveryPerson.LicenseType,
+                imageBase64
+            ));
         }
 
         return Ok(deliveryPeopleDto);

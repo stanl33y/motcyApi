@@ -1,9 +1,17 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 public class Rental
 {
+    public Rental(string motorcycleId, string deliveryPersonId, DateTime startDate, DateTime expectedEndDate, int rentalPlan)
+    {
+        MotorcycleId = motorcycleId;
+        DeliveryPersonId = deliveryPersonId;
+        StartDate = startDate;
+        ExpectedEndDate = expectedEndDate;
+        RentalPlan = rentalPlan;
+    }
+
     [Key]
     public int Id { get; set; }
 
@@ -33,9 +41,7 @@ public class Rental
 
     public DateTime? ReturnDate { get; set; }
 
+    public Motorcycle? Motorcycle { get; set; }
 
-    public Motorcycle Motorcycle { get; set; }
-
-    public DeliveryPerson DeliveryPerson { get; set; }
+    public DeliveryPerson? DeliveryPerson { get; set; }
 }
-

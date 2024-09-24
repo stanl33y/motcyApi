@@ -17,7 +17,7 @@ public class DeliveryPersonService : IDeliveryPersonService
 
     public async Task<DeliveryPerson> GetDeliveryPersonByIdAsync(string id)
     {
-        return await _deliveryPersonRepository.GetDeliveryPersonByIdAsync(id);
+        return await _deliveryPersonRepository.GetDeliveryPersonByIdAsync(id) ?? throw new InvalidOperationException("Delivery Person not found.");
     }
 
     public async Task<IEnumerable<DeliveryPerson>> GetAllDeliveryPeopleAsync()
@@ -27,7 +27,7 @@ public class DeliveryPersonService : IDeliveryPersonService
 
     public async Task<DeliveryPerson> GetDeliveryPersonByCnpjAsync(string cnpj)
     {
-        return await _deliveryPersonRepository.GetDeliveryPersonByCnpjAsync(cnpj);
+        return await _deliveryPersonRepository.GetDeliveryPersonByCnpjAsync(cnpj) ?? throw new InvalidOperationException("Delivery Person not found.");
     }
 
     public async Task<bool> UpdateLicenseImageAsync(string id, string image)

@@ -8,13 +8,14 @@ public class MotorcycleYearNotificationConsumer : BackgroundService
     private readonly IRabbitMqService _rabbitMqService;
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly ILogger<MotorcycleYearNotificationConsumer> _logger;
-    private IConnection _connection;
-    private IModel _channel;
+    private IConnection? _connection;
+    private IModel? _channel;
 
     public MotorcycleYearNotificationConsumer(
         IRabbitMqService rabbitMqService,
         IServiceScopeFactory scopeFactory,
-        ILogger<MotorcycleYearNotificationConsumer> logger)
+        ILogger<MotorcycleYearNotificationConsumer> logger
+    )
     {
         _rabbitMqService = rabbitMqService;
         _scopeFactory = scopeFactory;
@@ -64,6 +65,12 @@ public class MotorcycleYearNotificationConsumer : BackgroundService
                     var jsonMessage = Encoding.UTF8.GetString(body);
                     var eventData = JsonConvert.DeserializeObject<dynamic>(jsonMessage);
 
+                    if (eventData == null)
+                    {
+                        _logger.LogError("Error deserializing RabbitMQ message");
+                        return;
+                    }
+
                     if (eventData.Event == "MotorcycleYearNotification")
                     {
                         using (var scope = _scopeFactory.CreateScope())
@@ -73,11 +80,10 @@ public class MotorcycleYearNotificationConsumer : BackgroundService
                             var motorcycle = eventData.Data.ToObject<Motorcycle>();
                             _logger.LogInformation($"Processing notification for motorcycle: {motorcycle.Model}, Year: {motorcycle.Year}");
 
-                            var notification = new Notification
-                            {
-                                Message = $"Motorcycle ID ({motorcycle.Id}) {motorcycle.Model} from year {motorcycle.Year} registered.",
-                                CreatedAt = DateTime.UtcNow
-                            };
+                            var notification = new Notification(
+                                $"Motorcycle ID ({motorcycle.Id}) {motorcycle.Model} from year {motorcycle.Year} registered.",
+                                DateTime.UtcNow
+                            );
 
                             await notificationService.AddNotificationAsync(notification);
                             _logger.LogInformation("Notification saved to the database.");

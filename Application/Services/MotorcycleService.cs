@@ -12,8 +12,8 @@ public class MotorcycleService : IMotorcycleService
     }
 
     public async Task<Motorcycle> AddMotorcycleAsync(Motorcycle motorcycle)
-    { 
-        var newMotorcycle = await _motorcycleRepository.AddMotorcycleAsync(motorcycle);  
+    {
+        var newMotorcycle = await _motorcycleRepository.AddMotorcycleAsync(motorcycle);
 
         var motorcycleEvent = new MotorcycleRegisteredEvent(newMotorcycle.Id, newMotorcycle.Model, newMotorcycle.Year, newMotorcycle.Plate);
         await _motorcycleRegisteredEventHandler.HandleAsync(motorcycleEvent);
@@ -23,7 +23,7 @@ public class MotorcycleService : IMotorcycleService
 
     public async Task<Motorcycle> GetMotorcycleByIdAsync(string id)
     {
-        return await _motorcycleRepository.GetMotorcycleByIdAsync(id);
+        return await _motorcycleRepository.GetMotorcycleByIdAsync(id) ?? throw new InvalidOperationException("Motorcycle not found.");
     }
 
     public async Task<IEnumerable<Motorcycle>> GetAllMotorcyclesAsync()
@@ -36,16 +36,16 @@ public class MotorcycleService : IMotorcycleService
         var motorcycle = await _motorcycleRepository.GetMotorcycleByIdAsync(id);
         if (motorcycle == null)
         {
-            return null;
+            throw new InvalidOperationException("Motorcycle not found.");
         }
 
         motorcycle.Plate = newPlate;
-        return await _motorcycleRepository.UpdateMotorcycleAsync(motorcycle);
+        return await _motorcycleRepository.UpdateMotorcycleAsync(motorcycle) ?? throw new InvalidOperationException("Motorcycle not found.");
     }
 
     public async Task<Motorcycle> GetMotorcycleByPlateAsync(string plate)
     {
-        return await _motorcycleRepository.GetMotorcycleByPlateAsync(plate);
+        return await _motorcycleRepository.GetMotorcycleByPlateAsync(plate) ?? throw new InvalidOperationException("Motorcycle not found.");
     }
 
     public async Task<bool> DeleteMotorcycleAsync(string id)

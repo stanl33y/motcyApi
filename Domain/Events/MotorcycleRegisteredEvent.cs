@@ -1,17 +1,17 @@
 public class MotorcycleRegisteredEvent
 {
-    public MotorcycleRegisteredEvent(string identificador, string modelo, int ano, string placa)
+    public MotorcycleRegisteredEvent(string id, string model, int year, string plate)
     {
-        Identificador = identificador;
-        Modelo = modelo;
-        Ano = ano;
-        Placa = placa;
-        DataRegistro = DateTime.UtcNow;
+        Id = id;
+        Model = model;
+        Year = year;
+        Plate = plate;
+        RegisterDate = DateTime.UtcNow;
     }
 
-    public string Identificador { get; private set; }
-    public string Modelo { get; private set; }
-    public int Ano { get; private set; }
-    public string Placa { get; private set; }
-    public DateTime DataRegistro { get; private set; }
+    public string Id { get; private set; }
+    public string Model { get; private set; }
+    public int Year { get; private set; }
+    public string Plate { get; private set; }
+    public DateTime RegisterDate { get; private set; }
 }

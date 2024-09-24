@@ -1,6 +1,5 @@
 using Moq;
 using Xunit;
-using System.Threading.Tasks;
 
 public class MotorcycleServiceTests : TestBase
 {
@@ -17,13 +16,13 @@ public class MotorcycleServiceTests : TestBase
         _notificationServiceMock = new Mock<INotificationService>();
 
         _motorcycleRegisteredEventHandler = new MotorcycleRegisteredEventHandler(
-            _rabbitMqServiceMock.Object, 
-            null, 
-            _notificationServiceMock.Object
+            _rabbitMqServiceMock.Object,
+            _notificationServiceMock.Object,
+            _context
         );
 
         _motorcycleService = new MotorcycleService(
-            _motorcycleRepositoryMock.Object, 
+            _motorcycleRepositoryMock.Object,
             _motorcycleRegisteredEventHandler
         );
     }
@@ -31,8 +30,9 @@ public class MotorcycleServiceTests : TestBase
     [Fact]
     public async Task AddMotorcycleAsync_ShouldAddMotorcycle()
     {
+    // public Motorcycle(string id, int year, string model, string plate)
         // Arrange
-        var motorcycle = new Motorcycle { Id = "moto01", Model = "Honda", Year = 2020, Plate = "HND-2020" };
+        var motorcycle = new Motorcycle( "moto01", 2020,  "Honda", "HND-2020" );
         _motorcycleRepositoryMock.Setup(repo => repo.AddMotorcycleAsync(It.IsAny<Motorcycle>()))
             .ReturnsAsync(motorcycle);
 

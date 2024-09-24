@@ -4,7 +4,7 @@ public class MotorcycleRegisteredEventHandler
     private readonly AppDbContext _dbContext;
     private readonly INotificationService _notificationService;
 
-    public MotorcycleRegisteredEventHandler(IRabbitMqService rabbitMqService, AppDbContext dbContext, INotificationService notificationService)
+    public MotorcycleRegisteredEventHandler(IRabbitMqService rabbitMqService, INotificationService notificationService, AppDbContext dbContext)
     {
         _rabbitMqService = rabbitMqService;
         _dbContext = dbContext;
@@ -15,13 +15,12 @@ public class MotorcycleRegisteredEventHandler
     {
         _rabbitMqService.SendMessage(motorcycleRegisteredEvent);
 
-        var newMotorcycle = new Motorcycle
-        {
-            Id = motorcycleRegisteredEvent.Identificador,
-            Model = motorcycleRegisteredEvent.Modelo,
-            Year = motorcycleRegisteredEvent.Ano,
-            Plate = motorcycleRegisteredEvent.Placa
-        };
+        var newMotorcycle = new Motorcycle(
+            motorcycleRegisteredEvent.Id,
+            motorcycleRegisteredEvent.Year,
+            motorcycleRegisteredEvent.Model,
+            motorcycleRegisteredEvent.Plate
+        );
 
         await _notificationService.NotifyMotorcycleRegisteredAsync(newMotorcycle);
         await _notificationService.NotifyMotorcycleYearAsync(newMotorcycle);

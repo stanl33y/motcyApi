@@ -39,13 +39,14 @@ public class MotorcycleController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateMotorcycle([FromBody] MotorcycleDTO motorcycleDto)
     {
-        var result = await _motorcycleService.AddMotorcycleAsync(new Motorcycle
-        {
-            Id = motorcycleDto.Id,
-            Year = motorcycleDto.Year,
-            Model = motorcycleDto.Model,
-            Plate = motorcycleDto.Plate
-        });
+        var result = await _motorcycleService.AddMotorcycleAsync(
+            new Motorcycle (
+                motorcycleDto.Id,
+                motorcycleDto.Year,
+                motorcycleDto.Model,
+                motorcycleDto.Plate
+            )
+        );
 
         if (result == null)
         {
@@ -72,13 +73,12 @@ public class MotorcycleController : ControllerBase
             return NotFound();
         }
 
-        var motorcycleDto = new MotorcycleDTO
-        {
-            Id = motorcycle.Id,
-            Year = motorcycle.Year,
-            Model = motorcycle.Model,
-            Plate = motorcycle.Plate
-        };
+        var motorcycleDto = new MotorcycleDTO (
+            motorcycle.Id,
+            motorcycle.Year,
+            motorcycle.Model,
+            motorcycle.Plate
+        );
 
         return Ok(motorcycleDto);
     }
@@ -101,13 +101,12 @@ public class MotorcycleController : ControllerBase
             return NotFound();
         }
 
-        var motorcycleDtoUpdated = new MotorcycleDTO
-        {
-            Id = updatedMotorcycle.Id,
-            Year = updatedMotorcycle.Year,
-            Model = updatedMotorcycle.Model,
-            Plate = updatedMotorcycle.Plate
-        };
+        var motorcycleDtoUpdated = new MotorcycleDTO (
+            updatedMotorcycle.Id,
+            updatedMotorcycle.Year,
+            updatedMotorcycle.Model,
+            updatedMotorcycle.Plate
+        );
 
         return Ok(motorcycleDtoUpdated);
     }
@@ -143,13 +142,12 @@ public class MotorcycleController : ControllerBase
     {
         var motorcycles = await _motorcycleService.GetAllMotorcyclesAsync();
 
-        var motorcyclesDto = motorcycles.Select(m => new MotorcycleDTO
-        {
-            Id = m.Id,
-            Year = m.Year,
-            Model = m.Model,
-            Plate = m.Plate
-        });
+        var motorcyclesDto = motorcycles.Select(m => new MotorcycleDTO (
+            m.Id,
+            m.Year,
+            m.Model,
+            m.Plate
+        ));
 
         return Ok(motorcyclesDto);
     }

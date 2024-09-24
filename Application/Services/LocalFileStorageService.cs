@@ -40,7 +40,7 @@ public class LocalFileStorageService : IStorageService
         return uniqueFileName;
     }
 
-    public async Task<Stream> GetFileAsync(string filePath)
+    public Stream GetFile(string filePath)
     {
         if (!File.Exists($"{_storageBasePath}/{filePath}"))
         {
@@ -72,7 +72,7 @@ public class LocalFileStorageService : IStorageService
 
     private string GetUniqueFileName(string filePath)
     {
-        string directory = Path.GetDirectoryName($"{_storageBasePath}/{filePath}");
+        string directory = Path.GetDirectoryName($"{_storageBasePath}/{filePath}") ?? _storageBasePath;
         string fileNameWithoutExtension = Path.GetFileNameWithoutExtension($"{_storageBasePath}/{filePath}");
         string extension = Path.GetExtension($"{_storageBasePath}/{filePath}");
         int count = 1;

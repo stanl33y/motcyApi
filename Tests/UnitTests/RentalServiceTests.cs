@@ -1,7 +1,5 @@
 using Moq;
 using Xunit;
-using System;
-using System.Threading.Tasks;
 
 public class RentalServiceTests: TestBase
 {
@@ -26,12 +24,21 @@ public class RentalServiceTests: TestBase
     public async Task CreateRentalAsync_ShouldCreateRental()
     {
         // Arrange
-        var motorcycle = new Motorcycle { Id = "moto01", Model = "Yamaha", Year = 2021, Plate = "YMH-2021" };
-        var deliveryPerson = new DeliveryPerson { Id = "del01", Name = "John Doe" };
+        var motorcycle = new Motorcycle ( "moto01", 2021, "Yamaha", "YMH-2021" );
+
+        var deliveryPerson = new DeliveryPerson(
+            "del01",
+            "John Doe",
+            "12345678901234",
+            new DateTime(1990, 1, 1),
+            "12345678900",
+            "A"
+        );
+
         _motorcycleRepositoryMock.Setup(repo => repo.GetMotorcycleByIdAsync("moto01")).ReturnsAsync(motorcycle);
         _deliveryPersonRepositoryMock.Setup(repo => repo.GetDeliveryPersonByIdAsync("del01")).ReturnsAsync(deliveryPerson);
 
-        var rental = new Rental { MotorcycleId = motorcycle.Id, DeliveryPersonId = deliveryPerson.Id, RentalPlan = 7 };
+        var rental = new Rental(motorcycle.Id, deliveryPerson.Id ?? "", DateTime.Now, DateTime.Now.AddDays(7), 7);
         _rentalRepositoryMock.Setup(repo => repo.AddRentalAsync(It.IsAny<Rental>())).ReturnsAsync(rental);
 
         // Act

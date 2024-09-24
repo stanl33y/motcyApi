@@ -3,6 +3,22 @@
 /// </summary>
 public class MotorcycleDTO
 {
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MotorcycleDTO"/> class.
+    /// </summary>
+    /// <param name="id">The unique identifier of the motorcycle.</param>
+    /// <param name="year">The year the motorcycle was manufactured.</param>
+    /// <param name="model">The model of the motorcycle.</param>
+    /// <param name="plate">The license plate of the motorcycle.</param>
+    public MotorcycleDTO(string id, int year, string model, string plate)
+    {
+        Id = id;
+        Year = year;
+        Model = model;
+        Plate = plate;
+    }
+
     /// <summary>
     /// The unique identifier of the motorcycle.
     /// </summary>

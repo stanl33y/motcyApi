@@ -2,8 +2,18 @@ using System.ComponentModel.DataAnnotations;
 
 public class DeliveryPerson
 {
+    public DeliveryPerson(string? id, string name, string cnpj, DateTime dateOfBirth, string licenseNumber, string licenseType)
+    {
+        Id = id;
+        Name = name;
+        Cnpj = cnpj;
+        DateOfBirth = dateOfBirth;
+        LicenseNumber = licenseNumber;
+        LicenseType = licenseType;
+    }
+
     [Key]
-    public string Id { get; set; }
+    public string? Id { get; set; }
 
     [Required(ErrorMessage = "Name is required")]
     [StringLength(100, ErrorMessage = "Name can't be longer than 100 characters")]
