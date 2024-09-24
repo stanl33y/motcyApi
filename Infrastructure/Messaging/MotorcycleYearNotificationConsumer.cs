@@ -1,7 +1,11 @@
+using motcyApi.Application.Interfaces;
+using motcyApi.Domain.Entities;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
+
+namespace motcyApi.Infrastructure.Data.Messaging;
 
 public class MotorcycleYearNotificationConsumer : BackgroundService
 {

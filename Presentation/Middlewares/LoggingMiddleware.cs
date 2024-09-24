@@ -1,5 +1,7 @@
 using System.Diagnostics;
 
+namespace motcyApi.Presentation.Middlewares;
+
 public class LoggingMiddleware
 {
     private readonly RequestDelegate _next;

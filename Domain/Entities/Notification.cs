@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+namespace motcyApi.Domain.Entities;
+
 public class Notification
 {
     /// <summary>

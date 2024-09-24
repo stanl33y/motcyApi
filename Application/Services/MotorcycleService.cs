@@ -1,3 +1,11 @@
+using motcyApi.Application.Interfaces;
+using motcyApi.Domain.Entities;
+using motcyApi.Domain.Events;
+using motcyApi.Domain.Repositories;
+using motcyApi.Infrastructure.Data.Messaging;
+
+namespace motcyApi.Application.Services;
+
 public class MotorcycleService : IMotorcycleService
 {
     private readonly IMotorcycleRepository _motorcycleRepository;

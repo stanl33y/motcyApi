@@ -1,5 +1,12 @@
 using Xunit;
 using Moq;
+using motcyApi.Tests.Shared;
+using motcyApi.Application.Services;
+using motcyApi.Domain.Repositories;
+using motcyApi.Application.Interfaces;
+using motcyApi.Domain.Entities;
+
+namespace motcyApi.Tests.UnitTests;
 
 public class DeliveryPersonServiceTests : TestBase
 {

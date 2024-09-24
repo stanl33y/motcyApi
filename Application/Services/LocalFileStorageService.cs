@@ -1,3 +1,7 @@
+using motcyApi.Application.Interfaces;
+
+namespace motcyApi.Application.Services;
+
 public class LocalFileStorageService : IStorageService
 {
     private readonly string _storageBasePath;

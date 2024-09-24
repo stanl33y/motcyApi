@@ -1,5 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using motcyApi.Application.DTOs;
+using motcyApi.Application.Interfaces;
+
+namespace motcyApi.Presentation.Controllers;
 
 /// <summary>
 /// Controller responsible for managing motorcycle rentals.
@@ -70,7 +74,7 @@ public class RentalController : ControllerBase
     [HttpPut("{id}/devolucao")]
     public async Task<ActionResult<RentalDTO>> ReturnMotorcycle(int id, [FromBody] ReturnDateDTO returnDate)
     {
-        var rental = await _rentalService.ReturnMotorcycleAsync(id, returnDate.DataDevolucao);
+        var rental = await _rentalService.ReturnMotorcycleAsync(id, returnDate.ReturnDate);
         if (rental == null)
         {
             return NotFound();

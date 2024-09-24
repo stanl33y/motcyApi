@@ -1,5 +1,11 @@
 using Moq;
 using Xunit;
+using motcyApi.Tests.Shared;
+using motcyApi.Application.Services;
+using motcyApi.Domain.Repositories;
+using motcyApi.Domain.Entities;
+
+namespace motcyApi.Tests.UnitTests;
 
 public class RentalServiceTests: TestBase
 {

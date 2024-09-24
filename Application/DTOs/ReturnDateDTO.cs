@@ -1,4 +1,6 @@
+namespace motcyApi.Application.DTOs;
+
 public class ReturnDateDTO
 {
-    public DateTime DataDevolucao { get; set; }
+    public DateTime ReturnDate { get; set; }
 }

@@ -1,4 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using motcyApi.Domain.Entities;
+using motcyApi.Domain.Repositories;
+
+namespace motcyApi.Infrastructure.Data.Repositories;
 
 public class RentalRepository : IRentalRepository
 {

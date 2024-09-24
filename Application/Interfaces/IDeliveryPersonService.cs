@@ -1,3 +1,7 @@
+using motcyApi.Domain.Entities;
+
+namespace motcyApi.Application.Interfaces;
+
 public interface IDeliveryPersonService
 {
     Task<DeliveryPerson> RegisterDeliveryPersonAsync(DeliveryPerson deliveryPerson);

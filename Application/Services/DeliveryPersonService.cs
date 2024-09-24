@@ -1,3 +1,9 @@
+using motcyApi.Domain.Entities;
+using motcyApi.Domain.Repositories;
+using motcyApi.Application.Interfaces;
+
+namespace motcyApi.Application.Services;
+
 public class DeliveryPersonService : IDeliveryPersonService
 {
     private readonly IDeliveryPersonRepository _deliveryPersonRepository;

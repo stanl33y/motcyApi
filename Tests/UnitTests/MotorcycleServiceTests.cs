@@ -1,5 +1,14 @@
 using Moq;
 using Xunit;
+using motcyApi.Tests.Shared;
+using motcyApi.Application.Services;
+using motcyApi.Domain.Repositories;
+using motcyApi.Application.Interfaces;
+using motcyApi.Domain.Entities;
+using motcyApi.Infrastructure.Data.Messaging;
+using motcyApi.Domain.Events;
+
+namespace motcyApi.Tests.UnitTests;
 
 public class MotorcycleServiceTests : TestBase
 {
@@ -30,7 +39,6 @@ public class MotorcycleServiceTests : TestBase
     [Fact]
     public async Task AddMotorcycleAsync_ShouldAddMotorcycle()
     {
-    // public Motorcycle(string id, int year, string model, string plate)
         // Arrange
         var motorcycle = new Motorcycle( "moto01", 2020,  "Honda", "HND-2020" );
         _motorcycleRepositoryMock.Setup(repo => repo.AddMotorcycleAsync(It.IsAny<Motorcycle>()))

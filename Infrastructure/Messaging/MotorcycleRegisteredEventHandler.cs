@@ -1,3 +1,9 @@
+using motcyApi.Application.Interfaces;
+using motcyApi.Domain.Entities;
+using motcyApi.Domain.Events;
+
+namespace motcyApi.Infrastructure.Data.Messaging;
+
 public class MotorcycleRegisteredEventHandler
 {
     private readonly IRabbitMqService _rabbitMqService;

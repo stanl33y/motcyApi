@@ -1,5 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using motcyApi.Application.DTOs;
+using motcyApi.Application.Interfaces;
+
+namespace motcyApi.Presentation.Controllers;
 
 /// <summary>
 /// Controller responsible for user authentication.
@@ -20,17 +24,17 @@ public class AuthController : ControllerBase
     /// </summary>
     /// <remarks>
     /// Sample request:
-    /// 
+    ///
     ///     POST /api/v1/auth/login
     ///     {
     ///        "username": "admin",
     ///        "password": "admin"
     ///     }
-    /// 
+    ///
     /// Test users:
     /// - admin/admin
     /// - deliveryperson/deliveryperson
-    /// 
+    ///
     /// Returns a JWT token if the credentials are valid.
     /// </remarks>
     /// <param name="login">Object containing username and password.</param>

@@ -1,3 +1,7 @@
+using motcyApi.Domain.Entities;
+
+namespace motcyApi.Domain.Repositories;
+
 public interface IRentalRepository
 {
     Task<Rental> AddRentalAsync(Rental rental);

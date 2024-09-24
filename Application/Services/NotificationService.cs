@@ -1,3 +1,9 @@
+using motcyApi.Application.Interfaces;
+using motcyApi.Domain.Entities;
+using motcyApi.Domain.Repositories;
+
+namespace motcyApi.Application.Services;
+
 public class NotificationService : INotificationService
 {
     private readonly ILogger<NotificationService> _logger;

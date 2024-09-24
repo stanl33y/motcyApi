@@ -6,6 +6,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using motcyApi.Application.Interfaces;
+using motcyApi.Application.Services;
+using motcyApi.Domain.Repositories;
+using motcyApi.Infrastructure.Data;
+using motcyApi.Infrastructure.Data.Messaging;
+using motcyApi.Infrastructure.Data.Repositories;
+using motcyApi.Presentation.Filters;
+using motcyApi.Presentation.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,3 +1,5 @@
+namespace motcyApi.Application.DTOs;
+
 /// <summary>
 /// Data Transfer Object used for motorcycle rental details.
 /// </summary>

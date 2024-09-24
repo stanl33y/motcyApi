@@ -1,5 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using motcyApi.Application.Interfaces;
+using motcyApi.Applications.DTOs;
+using motcyApi.Domain.Entities;
+
+namespace motcyApi.Presentation.Controllers;
 
 /// <summary>
 /// Controller responsible for managing delivery personnel.

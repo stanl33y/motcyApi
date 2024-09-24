@@ -1,6 +1,10 @@
+using motcyApi.Domain.Entities;
+
+namespace motcyApi.Domain.Repositories;
+
 public interface IDeliveryPersonRepository
 {
-    Task<DeliveryPerson> AddDeliveryPersonAsync(DeliveryPerson deliveryPerson);      
+    Task<DeliveryPerson> AddDeliveryPersonAsync(DeliveryPerson deliveryPerson);
     Task<DeliveryPerson?> GetDeliveryPersonByIdAsync(string id);
     Task<IEnumerable<DeliveryPerson>> GetAllDeliveryPeopleAsync();
     Task<DeliveryPerson?> GetDeliveryPersonByCnpjAsync(string cnpj);

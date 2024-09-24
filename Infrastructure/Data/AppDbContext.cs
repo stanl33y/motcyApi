@@ -1,4 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using motcyApi.Domain.Entities;
+
+namespace motcyApi.Infrastructure.Data;
 
 public class AppDbContext : DbContext
 {

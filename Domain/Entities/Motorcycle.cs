@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
+namespace motcyApi.Domain.Entities;
+
 public class Motorcycle
 {
     /// <summary>

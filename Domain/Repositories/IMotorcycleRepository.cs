@@ -1,3 +1,7 @@
+using motcyApi.Domain.Entities;
+
+namespace motcyApi.Domain.Repositories;
+
 public interface IMotorcycleRepository
 {
     Task<Motorcycle> AddMotorcycleAsync(Motorcycle motorcycle);

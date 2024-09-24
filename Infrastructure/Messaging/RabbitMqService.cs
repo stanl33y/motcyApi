@@ -1,6 +1,9 @@
 using RabbitMQ.Client;
 using System.Text;
 using Newtonsoft.Json;
+using motcyApi.Application.Interfaces;
+
+namespace motcyApi.Infrastructure.Data.Messaging;
 
 public class RabbitMqService: IRabbitMqService
 {

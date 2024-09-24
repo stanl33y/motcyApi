@@ -1,3 +1,5 @@
+namespace motcyApi.Domain.Events;
+
 public class MotorcycleRegisteredEvent
 {
     public MotorcycleRegisteredEvent(string id, string model, int year, string plate)

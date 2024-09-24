@@ -1,4 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using motcyApi.Infrastructure.Data;
+
+namespace motcyApi.Tests.Shared;
 
 public class TestBase
 {

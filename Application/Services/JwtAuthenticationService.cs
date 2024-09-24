@@ -1,7 +1,10 @@
 using Microsoft.IdentityModel.Tokens;
+using motcyApi.Application.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+
+namespace motcyApi.Application.Services;
 
 public class JwtAuthenticationService : IJwtAuthenticationService
 {

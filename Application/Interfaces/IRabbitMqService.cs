@@ -1,3 +1,5 @@
+namespace motcyApi.Application.Interfaces;
+
 using RabbitMQ.Client;
 
 public interface IRabbitMqService

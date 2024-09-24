@@ -1,3 +1,7 @@
+using motcyApi.Domain.Entities;
+
+namespace motcyApi.Application.Interfaces;
+
 public interface IRentalService
 {
     Task<Rental> CreateRentalAsync(string motorcycleId, string deliveryPersonId, int rentalPlan, DateTime startDate, DateTime? endDate, DateTime expectedEndDate);

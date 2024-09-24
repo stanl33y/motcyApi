@@ -1,3 +1,5 @@
+namespace motcyApi.Applications.DTOs;
+
 /// <summary>
 /// Data Transfer Object used for delivery person registration and details.
 /// </summary>

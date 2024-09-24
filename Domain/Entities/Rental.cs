@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+namespace motcyApi.Domain.Entities;
+
 public class Rental
 {
     public Rental(string motorcycleId, string deliveryPersonId, DateTime startDate, DateTime expectedEndDate, int rentalPlan)

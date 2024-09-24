@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
+namespace motcyApi.Domain.Entities;
+
 public class DeliveryPerson
 {
     public DeliveryPerson(string? id, string name, string cnpj, DateTime dateOfBirth, string licenseNumber, string licenseType)
